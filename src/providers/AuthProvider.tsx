@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useState, type ReactNode } from '
 
 import { setUnauthorizedHandler } from '@/lib/api/client';
 import { userStorage } from '@/lib/storage/asyncStorage';
+import { onboardingStorage } from '@/lib/storage/onboardingStorage';
 import { tokenStorage } from '@/lib/storage/secureStore';
 import { authService } from '@/features/auth/api/auth.service';
 import type { AuthUser, LoginPayload } from '@/features/auth/auth.types';
@@ -10,7 +11,8 @@ type AuthContextValue = {
   user: AuthUser | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  signIn: (payload: LoginPayload) => Promise<void>;
+  hasOnboarded: boolean;
+  signIn: (payload: LoginPayload) => Promise<AuthUser>;
   signOut: () => Promise<void>;
 };
 
@@ -18,7 +20,10 @@ const AuthContext = createContext<AuthContextValue | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
+  const [hasOnboarded, setHasOnboarded] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+
+  console.log('user2', JSON.stringify(user, null,2));
 
   useEffect(() => {
     setUnauthorizedHandler(() => {
@@ -28,13 +33,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   async function restoreSession() {
-    const [accessToken, storedUser] = await Promise.all([
+    const [accessToken, storedUser, storedHasOnboarded] = await Promise.all([
       tokenStorage.getAccessToken(),
       userStorage.getUser(),
+      onboardingStorage.getHasOnboarded(),
     ]);
     if (accessToken && storedUser) {
       setUser(storedUser);
     }
+    setHasOnboarded(storedHasOnboarded);
     setIsLoading(false);
   }
 
@@ -43,8 +50,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     await Promise.all([
       tokenStorage.setTokens(accessToken, refreshToken),
       userStorage.setUser(authUser),
+      onboardingStorage.setHasOnboarded(),
     ]);
     setUser(authUser);
+    setHasOnboarded(true);
+    return authUser;
   }
 
   async function signOut() {
@@ -53,7 +63,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, isAuthenticated: !!user, isLoading, signIn, signOut }}>
+    <AuthContext.Provider
+      value={{ user, isAuthenticated: !!user, isLoading, hasOnboarded, signIn, signOut }}
+    >
       {children}
     </AuthContext.Provider>
   );

@@ -30,9 +30,7 @@ export default function RegisterScreen() {
           );
         },
         onError: (error) => {
-          if (axios.isAxiosError(error) && error.response?.status === 409) {
-            router.replace({ pathname: "/(auth)/login", params: { phone } });
-          }
+          console.log("Register error:", error);
         },
       },
     );
@@ -67,6 +65,20 @@ export default function RegisterScreen() {
             keyboardType="phone-pad"
           />
         </Input>
+
+        {isConflict && (
+          <Text className="text-error-600">
+            {"Этот номер уже зарегистрирован. "}
+            <Text
+              className="text-primary-500 underline"
+              onPress={() =>
+                router.replace({ pathname: "/(auth)/login", params: { phone } })
+              }
+            >
+              {"Войти"}
+            </Text>
+          </Text>
+        )}
 
         {register.isError && !isConflict && (
           <Text className="text-error-600">

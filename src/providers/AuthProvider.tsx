@@ -43,7 +43,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       tokenStorage.getAccessToken(),
       userStorage.getUser(),
       onboardingStorage.getHasOnboarded(),
-      // onboardingStorage.clearHasOnboarded(),
+      onboardingStorage.clearHasOnboarded(),
     ]);
     if (accessToken && storedUser) {
       setUser(storedUser);

@@ -21,12 +21,12 @@ export default function DriverHomeScreen() {
   return (
     <VStack className="flex-1 justify-center gap-6 px-6">
       <VStack className="gap-2">
-        <Heading size="2xl">Salom, {user?.name}</Heading>
+        <Heading size="2xl">Привет, {user?.name}</Heading>
         <Text className="text-typography-500">{user?.phone}</Text>
       </VStack>
 
       <Button variant="outline" onPress={handleLogout} isDisabled={logout.isPending}>
-        <ButtonText>Chiqish</ButtonText>
+        <ButtonText>Выйти</ButtonText>
       </Button>
     </VStack>
   );

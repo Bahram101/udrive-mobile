@@ -1,15 +1,17 @@
-import { Stack } from 'expo-router';
+import { Stack } from "expo-router";
 
-import { GluestackUIProvider } from '@/components/ui/gluestack-ui-provider';
-import { AppProviders } from '@/providers';
+import { GluestackUIProvider } from "@/components/ui/gluestack-ui-provider";
+import { AppProviders } from "@/providers";
 
-import '../../global.css';
+import { StatusBar } from "expo-status-bar";
+import "../../global.css";
 
 export default function RootLayout() {
   return (
     <GluestackUIProvider mode="system">
       <AppProviders>
         <Stack screenOptions={{ headerShown: false }} />
+        <StatusBar style="auto" />
       </AppProviders>
     </GluestackUIProvider>
   );

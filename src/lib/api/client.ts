@@ -1,6 +1,6 @@
-import axios from 'axios';
+import axios from "axios";
 
-import { tokenStorage } from '@/lib/storage/secureStore';
+import { tokenStorage } from "@/lib/storage/secureStore";
 
 export const apiClient = axios.create({
   baseURL: process.env.EXPO_PUBLIC_API_URL,
@@ -25,11 +25,15 @@ export function setUnauthorizedHandler(handler: UnauthorizedHandler) {
 }
 
 apiClient.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    console.log("Response:", response);
+    return response;
+  },
   (error) => {
     if (axios.isAxiosError(error) && error.response?.status === 401) {
       onUnauthorized?.();
     }
+    console.log("ERROR", error.response?.status, error.response?.data);
     return Promise.reject(error);
   },
 );

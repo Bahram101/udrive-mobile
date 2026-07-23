@@ -1,16 +1,16 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation } from "@tanstack/react-query";
 
-import { useAuth } from '@/providers/AuthProvider';
+import { useAuth } from "@/providers/AuthProvider";
 
-import { authService } from '../api/auth.service';
-import type { RegisterPayload, Role } from '../auth.types';
+import { authService } from "../api/auth.service";
+import type { RegisterPayload, Role } from "../auth.types";
 
-export function useRegister(role: Extract<Role, 'CLIENT' | 'DRIVER'>) {
+export function useRegister(role: Extract<Role, "CLIENT" | "DRIVER">) {
   const { signIn } = useAuth();
 
   return useMutation({
     mutationFn: async (payload: RegisterPayload) => {
-      if (role === 'CLIENT') {
+      if (role === "CLIENT") {
         await authService.registerClient(payload);
       } else {
         await authService.registerDriver(payload);

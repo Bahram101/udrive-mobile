@@ -8,7 +8,7 @@ import "../../global.css";
 
 export default function RootLayout() {
   return (
-    <GluestackUIProvider mode="system">
+    <GluestackUIProvider mode="light">
       <AppProviders>
         <Stack screenOptions={{ headerShown: false }} />
         <StatusBar style="auto" />

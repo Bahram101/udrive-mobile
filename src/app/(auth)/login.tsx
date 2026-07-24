@@ -2,9 +2,9 @@ import axios from "axios";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
 
-import { Button, ButtonSpinner, ButtonText } from "@/components/ui/button";
+import AppButton from "@/components/common/AppButton";
+import AppInput from "@/components/common/AppInput";
 import { Heading } from "@/components/ui/heading";
-import { Input, InputField } from "@/components/ui/input";
 import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
 import { useLogin } from "@/features/auth/hooks/useLogin";
@@ -36,31 +36,29 @@ export default function LoginScreen() {
     <VStack className="flex-1 justify-center gap-6 px-6">
       <VStack className="gap-2">
         <Heading size="2xl">Вход</Heading>
-        <Text className="text-typography-500">Введите ваш номер телефона</Text>
+        <Text className="text-muted-foreground">Введите ваш номер телефона</Text>
       </VStack>
 
       <VStack className="gap-4">
-        <Input>
-          <InputField
-            placeholder="+7XXXXXXXXXX"
-            value={phone}
-            onChangeText={setPhone}
-            keyboardType="phone-pad"
-          />
-        </Input>
+        <AppInput
+          placeholder="+7XXXXXXXXXX"
+          value={phone}
+          onChangeText={setPhone}
+          keyboardType="phone-pad"
+        />
 
         {login.isError && !isNotFound && (
-          <Text className="text-error-600">
+          <Text className="text-destructive">
             {"Произошла ошибка, попробуйте снова"}
           </Text>
         )}
 
         {isNotFound && (
           <VStack className="gap-2">
-            <Text className="text-error-600">
+            <Text className="text-destructive">
               {"Этот номер не зарегистрирован"}
             </Text>
-            <Button
+            <AppButton
               variant="link"
               onPress={() =>
                 router.replace({
@@ -69,19 +67,18 @@ export default function LoginScreen() {
                 })
               }
             >
-              <ButtonText>Регистрация</ButtonText>
-            </Button>
+              Регистрация
+            </AppButton>
           </VStack>
         )}
 
-        <Button
-          size="lg"
+        <AppButton
           onPress={handleSubmit}
           isDisabled={login.isPending || !phone}
+          isLoading={login.isPending}
         >
-          {login.isPending && <ButtonSpinner />}
-          <ButtonText>Войти</ButtonText>
-        </Button>
+          Войти
+        </AppButton>
       </VStack>
     </VStack>
   );

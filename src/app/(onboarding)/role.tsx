@@ -21,7 +21,7 @@ export default function RoleSelectionScreen() {
     <VStack className="flex-1 justify-center gap-10 px-6">
       <VStack className="gap-2">
         {/* <Heading size="2xl">В качестве кого вы продолжите?</Heading> */}
-        <Text className="text-typography-500 text-center text-lg">
+        <Text className="text-muted-foreground text-center text-lg">
           {"Выберите вашу роль для регистрации"}
         </Text>
       </VStack>

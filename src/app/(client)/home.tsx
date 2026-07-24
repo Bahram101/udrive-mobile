@@ -1,6 +1,7 @@
 import { useRouter } from 'expo-router';
+import { View } from 'react-native';
 
-import { Button, ButtonText } from '@/components/ui/button';
+import AppButton from '@/components/common/AppButton';
 import { Heading } from '@/components/ui/heading';
 import { Text } from '@/components/ui/text';
 import { VStack } from '@/components/ui/vstack';
@@ -19,15 +20,32 @@ export default function ClientHomeScreen() {
   }
 
   return (
-    <VStack className="flex-1 justify-center gap-6 px-6">
+    <VStack className="flex-1 gap-6 px-6 pt-8">
+      <View className="self-start rounded-full bg-lime-100 px-3 py-1.5">
+        <Text className="text-xs font-bold uppercase tracking-wide text-lime-800">
+          Клиент
+        </Text>
+      </View>
+
       <VStack className="gap-2">
         <Heading size="2xl">Привет, {user?.name}</Heading>
-        <Text className="text-typography-500">{user?.phone}</Text>
+        <Text className="text-muted-foreground">{user?.phone}</Text>
       </VStack>
 
-      <Button variant="outline" onPress={handleLogout} isDisabled={logout.isPending}>
-        <ButtonText>Выйти</ButtonText>
-      </Button>
+      <View className="gap-1.5 rounded-2xl border border-border bg-muted p-4">
+        <Text className="font-bold">Заказов пока нет</Text>
+        <Text className="text-sm text-muted-foreground">
+          Как только появится поездка — вы увидите её здесь.
+        </Text>
+      </View>
+
+      <AppButton
+        variant="outline"
+        onPress={handleLogout}
+        isDisabled={logout.isPending}
+      >
+        Выйти
+      </AppButton>
     </VStack>
   );
 }

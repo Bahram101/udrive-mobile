@@ -15,7 +15,7 @@ export default function ClientHomeScreen() {
 
   function handleLogout() {
     logout.mutate(undefined, {
-      onSuccess: () => router.replace('/(auth)/login'),
+      onSuccess: () => router.replace('/(auth)/phone'),
     });
   }
 

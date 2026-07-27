@@ -1,36 +1,33 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
+import { ScrollView, View } from "react-native";
 
 import AppButton from "@/components/common/AppButton";
 import AppInput from "@/components/common/AppInput";
 import { Heading } from "@/components/ui/heading";
 import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
-import { useRegister } from "@/features/auth/hooks/useRegister";
-import { ScrollView } from "react-native";
+import type { SelectableRole } from "@/features/auth/auth.types";
+import { useVerifyOtp } from "@/features/auth/hooks/useVerifyOtp";
 
 export default function RegisterScreen() {
-  const { role, phone: initialPhone } = useLocalSearchParams<{
-    role: "CLIENT" | "DRIVER";
-    phone?: string;
-  }>();
+  const { phone, code } = useLocalSearchParams<{ phone: string; code: string }>();
   const router = useRouter();
   const [name, setName] = useState("");
-  const [phone, setPhone] = useState(initialPhone ?? "");
+  const [role, setRole] = useState<SelectableRole | null>(null);
 
-  const register = useRegister(role);
+  const register = useVerifyOtp();
 
   function handleSubmit() {
+    if (!role) return;
+
     register.mutate(
-      { name, phone },
+      { phone, code, name, role },
       {
         onSuccess: (authUser) => {
           router.replace(
             authUser.role === "DRIVER" ? "/(driver)/home" : "/(client)/home",
           );
-        },
-        onError: (error) => {
-          console.log("Register error:", error);
         },
       },
     );
@@ -45,12 +42,12 @@ export default function RegisterScreen() {
         paddingHorizontal: 24,
       }}
     >
-      <VStack className="gap-4">
-        <VStack>
-          <Heading size="2xl">Регистрация</Heading>
-          {/* <Text className="text-muted-foreground">
-            Введите ваши данные как {role === "DRIVER" ? "водитель" : "клиент"}
-          </Text> */}
+      <VStack className="gap-6">
+        <VStack className="gap-2">
+          <Heading size="2xl">Расскажите о себе</Heading>
+          <Text className="text-muted-foreground">
+            Это ваш первый вход — заполните профиль
+          </Text>
         </VStack>
 
         {register.isError && (
@@ -66,30 +63,35 @@ export default function RegisterScreen() {
             onChangeText={setName}
           />
 
-          <AppInput
-            placeholder="+7XXXXXXXXXX"
-            value={phone}
-            onChangeText={setPhone}
-            keyboardType="phone-pad"
-          />
+          <VStack className="gap-2">
+            <Text className="text-muted-foreground">
+              Вы будете использовать uDrive как
+            </Text>
+            <View className="flex-row gap-3">
+              <AppButton
+                className="flex-1"
+                variant={role === "CLIENT" ? "default" : "outline"}
+                onPress={() => setRole("CLIENT")}
+              >
+                Клиент
+              </AppButton>
+              <AppButton
+                className="flex-1"
+                variant={role === "DRIVER" ? "default" : "outline"}
+                onPress={() => setRole("DRIVER")}
+              >
+                Водитель
+              </AppButton>
+            </View>
+          </VStack>
 
           <AppButton
             onPress={handleSubmit}
-            isDisabled={register.isPending || !name || !phone}
+            isDisabled={register.isPending || !name || !role}
             isLoading={register.isPending}
           >
             Продолжить
           </AppButton>
-
-          <Text className="text-right">
-            {"У вас уже есть аккаунт? "}
-            <Text
-              className="text-lime-700 underline"
-              onPress={() => router.replace({ pathname: "/(auth)/login" })}
-            >
-              Войти
-            </Text>
-          </Text>
         </VStack>
       </VStack>
     </ScrollView>

@@ -4,7 +4,7 @@ import Loader from "@/components/ui/Loader";
 import { useAuth } from "@/providers/AuthProvider";
 
 export default function Index() {
-  const { isLoading, isAuthenticated, hasOnboarded, user } = useAuth();
+  const { isLoading, isAuthenticated, user } = useAuth();
 
   if (isLoading) {
     return <Loader color="black" />;
@@ -18,7 +18,5 @@ export default function Index() {
     );
   }
 
-  return (
-    <Redirect href={hasOnboarded ? "/(auth)/login" : "/(onboarding)/role"} />
-  );
+  return <Redirect href="/(auth)/phone" />;
 }

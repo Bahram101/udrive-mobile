@@ -1,32 +1,24 @@
 import { apiClient } from "@/lib/api/client";
 
 import type {
-  LoginPayload,
-  LoginResponse,
-  RegisterPayload,
-  RegisterResponse,
+  SendOtpPayload,
+  SendOtpResponse,
+  VerifyOtpPayload,
+  VerifyOtpResponse,
 } from "../auth.types";
 
 export const authService = {
-  async login(payload: LoginPayload): Promise<LoginResponse> {
-    const { data } = await apiClient.post<LoginResponse>(
-      "/auth/login",
+  async sendOtp(payload: SendOtpPayload): Promise<SendOtpResponse> {
+    const { data } = await apiClient.post<SendOtpResponse>(
+      "/auth/send-otp",
       payload,
     );
     return data;
   },
 
-  async registerClient(payload: RegisterPayload): Promise<RegisterResponse> {
-    const { data } = await apiClient.post<RegisterResponse>(
-      "/auth/client/register",
-      payload,
-    );
-    return data;
-  },
-
-  async registerDriver(payload: RegisterPayload): Promise<RegisterResponse> {
-    const { data } = await apiClient.post<RegisterResponse>(
-      "/auth/driver/register",
+  async verifyOtp(payload: VerifyOtpPayload): Promise<VerifyOtpResponse> {
+    const { data } = await apiClient.post<VerifyOtpResponse>(
+      "/auth/verify-otp",
       payload,
     );
     return data;

@@ -1,13 +1,13 @@
 export type Role = 'CLIENT' | 'DRIVER' | 'ADMIN';
 
+export type SelectableRole = Extract<Role, 'CLIENT' | 'DRIVER'>;
+
 export type AuthUser = {
   id: string;
   phone: string;
   name: string;
   role: Role;
-  email?: string | null;
-  avatar?: string | null;
-  rating?: number | null;
+  driver?: { id: string };
 };
 
 export type AuthTokens = {
@@ -15,19 +15,22 @@ export type AuthTokens = {
   refreshToken: string;
 };
 
-export type LoginPayload = {
+export type SendOtpPayload = {
   phone: string;
 };
 
-export type LoginResponse = AuthTokens & {
-  user: AuthUser;
+export type SendOtpResponse = {
+  message: string;
+  code: string;
 };
 
-export type RegisterPayload = {
+export type VerifyOtpPayload = {
   phone: string;
-  name: string;
+  code: string;
+  name?: string;
+  role?: SelectableRole;
 };
 
-export type RegisterResponse = {
+export type VerifyOtpResponse = AuthTokens & {
   user: AuthUser;
 };

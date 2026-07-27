@@ -15,7 +15,7 @@ export default function DriverHomeScreen() {
 
   function handleLogout() {
     logout.mutate(undefined, {
-      onSuccess: () => router.replace('/(auth)/login'),
+      onSuccess: () => router.replace('/(auth)/phone'),
     });
   }
 

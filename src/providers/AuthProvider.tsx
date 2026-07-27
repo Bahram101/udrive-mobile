@@ -7,18 +7,16 @@ import {
 } from "react";
 
 import { authService } from "@/features/auth/api/auth.service";
-import type { AuthUser, LoginPayload } from "@/features/auth/auth.types";
+import type { AuthUser, VerifyOtpPayload } from "@/features/auth/auth.types";
 import { setUnauthorizedHandler } from "@/lib/api/client";
 import { userStorage } from "@/lib/storage/asyncStorage";
-import { onboardingStorage } from "@/lib/storage/onboardingStorage";
 import { tokenStorage } from "@/lib/storage/secureStore";
 
 type AuthContextValue = {
   user: AuthUser | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  hasOnboarded: boolean;
-  signIn: (payload: LoginPayload) => Promise<AuthUser>;
+  signIn: (payload: VerifyOtpPayload) => Promise<AuthUser>;
   signOut: () => Promise<void>;
 };
 
@@ -26,10 +24,7 @@ const AuthContext = createContext<AuthContextValue | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
-  const [hasOnboarded, setHasOnboarded] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-
-  console.log("user2", JSON.stringify(user, null, 2));
 
   useEffect(() => {
     setUnauthorizedHandler(() => {
@@ -39,32 +34,27 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   async function restoreSession() {
-    const [accessToken, storedUser, storedHasOnboarded] = await Promise.all([
+    const [accessToken, storedUser] = await Promise.all([
       tokenStorage.getAccessToken(),
       userStorage.getUser(),
-      onboardingStorage.getHasOnboarded(),
-      onboardingStorage.clearHasOnboarded(),
     ]);
     if (accessToken && storedUser) {
       setUser(storedUser);
     }
-    setHasOnboarded(storedHasOnboarded);
     setIsLoading(false);
   }
 
-  async function signIn(payload: LoginPayload) {
+  async function signIn(payload: VerifyOtpPayload) {
     const {
       accessToken,
       refreshToken,
       user: authUser,
-    } = await authService.login(payload);
+    } = await authService.verifyOtp(payload);
     await Promise.all([
       tokenStorage.setTokens(accessToken, refreshToken),
       userStorage.setUser(authUser),
-      onboardingStorage.setHasOnboarded(),
     ]);
     setUser(authUser);
-    setHasOnboarded(true);
     return authUser;
   }
 
@@ -79,7 +69,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         user,
         isAuthenticated: !!user,
         isLoading,
-        hasOnboarded,
         signIn,
         signOut,
       }}

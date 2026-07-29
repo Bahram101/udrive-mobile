@@ -21,7 +21,7 @@ const AppButton = ({
       variant={variant}
       size={size}
       className={cn(
-        "min-h-14 rounded-2xl",
+        "min-h-14 rounded-2xl will-change-variable",
         variant === "default" &&
           "bg-lime-400 data-[hover=true]:bg-lime-400/90 data-[active=true]:bg-lime-400/90",
         className,

@@ -11,7 +11,10 @@ import type { SelectableRole } from "@/features/auth/auth.types";
 import { useVerifyOtp } from "@/features/auth/hooks/useVerifyOtp";
 
 export default function RegisterScreen() {
-  const { phone, code } = useLocalSearchParams<{ phone: string; code: string }>();
+  const { phone, code } = useLocalSearchParams<{
+    phone: string;
+    code: string;
+  }>();
   const router = useRouter();
   const [name, setName] = useState("");
   const [role, setRole] = useState<SelectableRole | null>(null);
@@ -19,6 +22,7 @@ export default function RegisterScreen() {
   const register = useVerifyOtp();
 
   function handleSubmit() {
+    console.log("Submitting registration with:", { phone, code, name, role });
     if (!role) return;
 
     register.mutate(

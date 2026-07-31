@@ -8,7 +8,7 @@ import {
 
 import { authService } from "@/features/auth/api/auth.service";
 import type { AuthUser, VerifyOtpPayload } from "@/features/auth/auth.types";
-import { setUnauthorizedHandler } from "@/lib/api/client";
+import { setUnauthorizedHandler } from "@/lib/api/authInterceptor";
 import { userStorage } from "@/lib/storage/asyncStorage";
 import { tokenStorage } from "@/lib/storage/secureStore";
 
@@ -18,6 +18,7 @@ type AuthContextValue = {
   isLoading: boolean;
   signIn: (payload: VerifyOtpPayload) => Promise<AuthUser>;
   signOut: () => Promise<void>;
+  refreshUser: () => Promise<AuthUser>;
 };
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -63,6 +64,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(null);
   }
 
+  async function refreshUser() {
+    const { user: authUser } = await authService.getMe();
+    await userStorage.setUser(authUser);
+    setUser(authUser);
+    return authUser;
+  }
+
   return (
     <AuthContext.Provider
       value={{
@@ -71,6 +79,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         isLoading,
         signIn,
         signOut,
+        refreshUser,
       }}
     >
       {children}

@@ -8,7 +8,7 @@ import { Heading } from "@/components/ui/heading";
 import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
 import type { SelectableRole } from "@/features/auth/auth.types";
-import { useVerifyOtp } from "@/features/auth/hooks/useVerifyOtp";
+import { useVerifyOtp } from "@/features/auth/hooks";
 
 export default function RegisterScreen() {
   const { phone, code } = useLocalSearchParams<{

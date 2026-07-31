@@ -1,5 +1,6 @@
 import axios from "axios";
 
+import { attachAuthInterceptor } from "@/lib/api/authInterceptor";
 import { tokenStorage } from "@/lib/storage/secureStore";
 
 export const apiClient = axios.create({
@@ -15,25 +16,4 @@ apiClient.interceptors.request.use(async (config) => {
   return config;
 });
 
-// AuthProvider registers itself here on mount so a 401 can trigger sign-out
-// without client.ts importing the provider (would create a circular import).
-type UnauthorizedHandler = () => void;
-let onUnauthorized: UnauthorizedHandler | null = null;
-
-export function setUnauthorizedHandler(handler: UnauthorizedHandler) {
-  onUnauthorized = handler;
-}
-
-apiClient.interceptors.response.use(
-  (response) => {
-    // console.log("Response:", response);
-    return response;
-  },
-  (error) => {
-    if (axios.isAxiosError(error) && error.response?.status === 401) {
-      onUnauthorized?.();
-    }
-    // console.log("ERROR", error.response?.status, error.response?.data);
-    return Promise.reject(error);
-  },
-);
+attachAuthInterceptor(apiClient);

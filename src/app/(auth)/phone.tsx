@@ -7,7 +7,7 @@ import AppInput from "@/components/common/AppInput";
 import { Heading } from "@/components/ui/heading";
 import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
-import { useSendOtp } from "@/features/auth/hooks/useSendOtp";
+import { useSendOtp } from "@/features/auth/hooks";
 
 export default function PhoneScreen() {
   const router = useRouter();

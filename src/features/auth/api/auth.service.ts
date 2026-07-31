@@ -1,6 +1,7 @@
 import { apiClient } from "@/lib/api/client";
 
 import type {
+  MeResponse,
   SendOtpPayload,
   SendOtpResponse,
   VerifyOtpPayload,
@@ -21,6 +22,11 @@ export const authService = {
       "/auth/verify-otp",
       payload,
     );
+    return data;
+  },
+
+  async getMe(): Promise<MeResponse> {
+    const { data } = await apiClient.get<MeResponse>("/auth/me");
     return data;
   },
 };

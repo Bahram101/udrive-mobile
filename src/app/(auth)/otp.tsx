@@ -8,8 +8,7 @@ import AppInput from "@/components/common/AppInput";
 import { Heading } from "@/components/ui/heading";
 import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
-import { useSendOtp } from "@/features/auth/hooks/useSendOtp";
-import { useVerifyOtp } from "@/features/auth/hooks/useVerifyOtp";
+import { useSendOtp, useVerifyOtp } from "@/features/auth/hooks";
 
 export default function OtpScreen() {
   const { phone } = useLocalSearchParams<{ phone: string }>();

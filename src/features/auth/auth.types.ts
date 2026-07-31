@@ -34,3 +34,7 @@ export type VerifyOtpPayload = {
 export type VerifyOtpResponse = AuthTokens & {
   user: AuthUser;
 };
+
+export type MeResponse = {
+  user: AuthUser;
+};

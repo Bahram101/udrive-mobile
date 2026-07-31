@@ -5,7 +5,7 @@ import AppButton from '@/components/common/AppButton';
 import { Heading } from '@/components/ui/heading';
 import { Text } from '@/components/ui/text';
 import { VStack } from '@/components/ui/vstack';
-import { useLogout } from '@/features/auth/hooks/useLogout';
+import { useLogout } from '@/features/auth/hooks';
 import { useAuth } from '@/providers/AuthProvider';
 
 export default function DriverHomeScreen() {

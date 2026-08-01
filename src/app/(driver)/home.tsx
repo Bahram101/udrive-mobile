@@ -1,12 +1,13 @@
-import { useRouter } from 'expo-router';
-import { View } from 'react-native';
+import { useRouter } from "expo-router";
+import { View } from "react-native";
 
-import AppButton from '@/components/common/AppButton';
-import { Heading } from '@/components/ui/heading';
-import { Text } from '@/components/ui/text';
-import { VStack } from '@/components/ui/vstack';
-import { useLogout } from '@/features/auth/hooks';
-import { useAuth } from '@/providers/AuthProvider';
+import AppButton from "@/components/common/AppButton";
+import ScreenLayout from "@/components/common/ScreenLayout";
+import { Heading } from "@/components/ui/heading";
+import { Text } from "@/components/ui/text";
+import { VStack } from "@/components/ui/vstack";
+import { useLogout } from "@/features/auth/hooks";
+import { useAuth } from "@/providers/AuthProvider";
 
 export default function DriverHomeScreen() {
   const { user } = useAuth();
@@ -15,12 +16,12 @@ export default function DriverHomeScreen() {
 
   function handleLogout() {
     logout.mutate(undefined, {
-      onSuccess: () => router.replace('/(auth)/phone'),
+      onSuccess: () => router.replace("/(auth)/phone"),
     });
   }
 
   return (
-    <VStack className="flex-1 gap-6 px-6 pt-8">
+    <ScreenLayout>
       <View className="self-start rounded-full bg-lime-100 px-3 py-1.5">
         <Text className="text-xs font-bold uppercase tracking-wide text-lime-800">
           Водитель
@@ -46,6 +47,6 @@ export default function DriverHomeScreen() {
       >
         Выйти
       </AppButton>
-    </VStack>
+    </ScreenLayout>
   );
 }

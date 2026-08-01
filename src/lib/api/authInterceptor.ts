@@ -32,8 +32,8 @@ async function refreshAccessToken(): Promise<string> {
 export function attachAuthInterceptor(apiClient: AxiosInstance) {
   apiClient.interceptors.response.use(
     (response) => response,
-    async (error: any) => {
-      if (!axios.isAxiosError(error) || error.response?.status !== 401) {
+    async (error: unknown) => {
+      if (!axios.isAxiosError(error) || error?.response?.status !== 401) {
         throw error;
       }
       const config = error.config as RetriableConfig | undefined;
@@ -54,13 +54,12 @@ export function attachAuthInterceptor(apiClient: AxiosInstance) {
           });
         }
 
-        const accessToken = await refreshPromise;
-        await tokenStorage.setTokens(accessToken);
+        await refreshPromise;
         return apiClient(config);
-      } catch {
+      } catch (refreshError) {
         await tokenStorage.clearTokens();
         onUnauthorized?.();
-        throw error;
+        throw refreshError;
       }
     },
   );

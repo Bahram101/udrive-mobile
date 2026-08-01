@@ -2,6 +2,7 @@ import {
   createContext,
   useContext,
   useEffect,
+  useMemo,
   useState,
   type ReactNode,
 } from "react";
@@ -41,6 +42,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     ]);
     if (accessToken && storedUser) {
       setUser(storedUser);
+    } else {
+      await Promise.all([tokenStorage.clearTokens(), userStorage.clearUser()]);
     }
     setIsLoading(false);
   }
@@ -73,14 +76,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   return (
     <AuthContext.Provider
-      value={{
-        user,
-        isAuthenticated: !!user,
-        isLoading,
-        signIn,
-        signOut,
-        refreshUser,
-      }}
+      value={useMemo(
+        () => ({
+          user,
+          isAuthenticated: !!user,
+          isLoading,
+          signIn,
+          signOut,
+          refreshUser,
+        }),
+        [user, isLoading],
+      )}
     >
       {children}
     </AuthContext.Provider>

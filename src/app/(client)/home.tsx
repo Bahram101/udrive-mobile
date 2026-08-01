@@ -29,7 +29,7 @@ export default function ClientHomeScreen() {
   }
 
   return (
-    <VStack className="flex-1 gap-6 px-6 pt-8">
+    <VStack className="flex-1 gap-6 px-6 pt-14">
       <View className="self-start rounded-full bg-lime-100 px-3 py-1.5">
         <Text className="text-xs font-bold uppercase tracking-wide text-lime-800">
           Клиент

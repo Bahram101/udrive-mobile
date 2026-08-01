@@ -6,7 +6,7 @@ type Props = {
 };
 
 const ScreenLayout = ({ children }: Props) => {
-  return <View className="flex-1 gap-6 px-6 pt-12">{children}</View>;
+  return <View className="flex-1 gap-6 pt-16 px-4">{children}</View>;
 };
 
 export default ScreenLayout;

@@ -31,12 +31,6 @@ export default function ClientHomeScreen() {
 
   return (
     <ScreenLayout>
-      <View className="self-start rounded-full bg-lime-100 px-3 py-1.5">
-        <Text className="text-xs font-bold uppercase tracking-wide text-lime-800">
-          Клиент
-        </Text>
-      </View>
-
       <VStack className="gap-2">
         <Heading size="2xl">Привет, {user?.name}</Heading>
         <Text className="text-muted-foreground">{user?.phone}</Text>

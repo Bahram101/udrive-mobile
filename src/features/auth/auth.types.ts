@@ -7,6 +7,8 @@ export type AuthUser = {
   phone: string;
   name: string;
   role: Role;
+  avatar?: string | null;
+  rating?: number | null;
   driver?: { id: string };
 };
 

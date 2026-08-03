@@ -22,7 +22,6 @@ export default function RegisterScreen() {
   const register = useVerifyOtp();
 
   function handleSubmit() {
-    console.log("Submitting registration with:", { phone, code, name, role });
     if (!role) return;
 
     register.mutate(

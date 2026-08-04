@@ -1,5 +1,5 @@
-import type { ComponentProps } from "react";
 import type { Ionicons } from "@expo/vector-icons";
+import type { ComponentProps } from "react";
 
 export type MenuItemConfig = {
   key: string;
@@ -17,13 +17,13 @@ export const MENU_ITEMS: MenuItemConfig[] = [
     icon: "flash-outline",
     badge: "NEW",
   },
-  { key: "couriers", label: "Курьеры", icon: "bicycle-outline" },
+  // { key: "couriers", label: "Курьеры", icon: "bicycle-outline" },
   { key: "payments", label: "Способы оплаты", icon: "card-outline" },
-  { key: "business", label: "Бизнес доставка", icon: "briefcase-outline" },
-  { key: "intercity", label: "Межгород", icon: "globe-outline" },
-  { key: "addresses", label: "Мои адреса", icon: "bookmark-outline" },
-  { key: "cargo", label: "Грузовые", icon: "cube-outline" },
-  { key: "notifications", label: "Уведомления", icon: "notifications-outline" },
-  { key: "security", label: "Безопасность", icon: "shield-checkmark-outline" },
+  // { key: "business", label: "Бизнес доставка", icon: "briefcase-outline" },
+  // { key: "intercity", label: "Межгород", icon: "globe-outline" },
+  // { key: "addresses", label: "Мои адреса", icon: "bookmark-outline" },
+  // { key: "cargo", label: "Грузовые", icon: "cube-outline" },
+  // { key: "notifications", label: "Уведомления", icon: "notifications-outline" },
+  // { key: "security", label: "Безопасность", icon: "shield-checkmark-outline" },
   { key: "settings", label: "Настройки", icon: "settings-outline" },
 ];

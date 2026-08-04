@@ -82,7 +82,7 @@ export default function OtpScreen() {
             Подтвердить
           </AppButton>
 
-          <Text className="text-right">
+          {/* <Text className="text-right">
             {"Не пришёл код? "}
             <Text
               className="text-lime-700 underline"
@@ -90,7 +90,7 @@ export default function OtpScreen() {
             >
               Отправить ещё раз
             </Text>
-          </Text>
+          </Text> */}
         </VStack>
       </VStack>
     </ScrollView>

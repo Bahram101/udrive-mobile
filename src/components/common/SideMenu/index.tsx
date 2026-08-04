@@ -1,6 +1,14 @@
 import { Ionicons } from "@expo/vector-icons";
+import { LogOut } from "lucide-react-native";
 import { useEffect, useState } from "react";
-import { Dimensions, Image, Modal, Pressable, ScrollView, View } from "react-native";
+import {
+  Dimensions,
+  Image,
+  Modal,
+  Pressable,
+  ScrollView,
+  View,
+} from "react-native";
 import Animated, {
   runOnJS,
   useAnimatedStyle,
@@ -12,10 +20,20 @@ import AppButton from "@/components/common/AppButton";
 import { Text } from "@/components/ui/text";
 import { useAuth } from "@/providers/AuthProvider";
 
+import { useLogout } from "@/features/auth/hooks/useLogout";
+import { useRouter } from "expo-router";
 import { MENU_ITEMS } from "./menuItems";
 
 const PANEL_WIDTH = Math.min(Dimensions.get("window").width * 0.82, 320);
 const ANIMATION_DURATION = 220;
+
+const PANEL_SHADOW = {
+  shadowColor: "#000",
+  shadowOffset: { width: 4, height: 0 },
+  shadowOpacity: 0.15,
+  shadowRadius: 12,
+  elevation: 16,
+};
 
 type SideMenuProps = {
   visible: boolean;
@@ -24,6 +42,9 @@ type SideMenuProps = {
 
 export default function SideMenu({ visible, onClose }: SideMenuProps) {
   const { user } = useAuth();
+  const router = useRouter();
+  const logout = useLogout();
+
   const [mounted, setMounted] = useState(false);
   const translateX = useSharedValue(-PANEL_WIDTH);
 
@@ -40,7 +61,7 @@ export default function SideMenu({ visible, onClose }: SideMenuProps) {
         },
       );
     }
-  }, [visible]);
+  }, [visible, mounted, translateX]);
 
   const panelStyle = useAnimatedStyle(() => ({
     transform: [{ translateX: translateX.value }],
@@ -50,6 +71,12 @@ export default function SideMenu({ visible, onClose }: SideMenuProps) {
 
   const isDriver = user?.role === "DRIVER";
   const roleSwitchLabel = isDriver ? "Стать клиентом" : "Стать водителем";
+
+  function handleLogout() {
+    logout.mutate(undefined, {
+      onSuccess: () => router.replace("/(auth)/phone"),
+    });
+  }
 
   return (
     <Modal
@@ -61,7 +88,7 @@ export default function SideMenu({ visible, onClose }: SideMenuProps) {
     >
       <View className="flex-1 flex-row">
         <Animated.View
-          style={[{ width: PANEL_WIDTH }, panelStyle]}
+          style={[{ width: PANEL_WIDTH }, PANEL_SHADOW, panelStyle]}
           className="gap-2 bg-background pb-8 pt-16 px-5"
         >
           <Pressable className="mb-2 flex-row items-center justify-between">
@@ -111,6 +138,17 @@ export default function SideMenu({ visible, onClose }: SideMenuProps) {
                 )}
               </Pressable>
             ))}
+
+            <Pressable
+              className="flex-row items-center gap-4 py-3.5"
+              onPress={handleLogout}
+              disabled={logout.isPending}
+            >
+              <LogOut />
+              <Text className="text-[15px] font-medium text-destructive">
+                Выйти
+              </Text>
+            </Pressable>
           </ScrollView>
 
           <View className="gap-4 border-t border-border pt-4">

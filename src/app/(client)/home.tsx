@@ -7,15 +7,6 @@ import { useAuth } from "@/providers/AuthProvider";
 
 export default function ClientHomeScreen() {
   const { user } = useAuth();
-  // const getMe = useGetMe();
-
-  // function handleGetMe() {
-  //   getMe.mutate(undefined, {
-  //     // onSuccess: (me) =>
-  //     //   Alert.alert("Успех", `${me.name} · ${me.phone} · ${me.role}`),
-  //     onError: (error) => Alert.alert("Ошибка", error.message),
-  //   });
-  // }
 
   return (
     <ScreenLayout>
@@ -25,10 +16,6 @@ export default function ClientHomeScreen() {
       </VStack>
 
       <CreateOrderForm />
-
-      {/* <AppButton onPress={handleGetMe} isLoading={getMe.isPending}>
-        Get me
-      </AppButton> */}
     </ScreenLayout>
   );
 }

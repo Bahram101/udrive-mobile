@@ -8,19 +8,17 @@ import { VStack } from "@/components/ui/vstack";
 import { useCreateOrder } from "../hooks/useCreateOrder";
 
 export function CreateOrderForm() {
-  const [pickup, setPickup] = useState("");
-  const [dropoff, setDropoff] = useState("");
+  const [address, setAddress] = useState("");
   const createOrder = useCreateOrder();
 
-  const isValid = pickup.trim().length > 0 && dropoff.trim().length > 0;
+  const isValid = address.trim().length > 0;
 
   function handleSubmit() {
     createOrder.mutate(
-      { fromAddress: pickup, toAddress: dropoff },
+      { fromAddress: address },
       {
         onSuccess: () => {
-          setPickup("");
-          setDropoff("");
+          setAddress("");
         },
       },
     );
@@ -29,21 +27,15 @@ export function CreateOrderForm() {
   return (
     <VStack className="gap-3">
       <AppInput
-        placeholder="Откуда"
-        value={pickup}
-        onChangeText={setPickup}
-        editable={!createOrder.isPending}
-      />
-      <AppInput
-        placeholder="Куда"
-        value={dropoff}
-        onChangeText={setDropoff}
+        placeholder="Ваш адрес"
+        value={address}
+        onChangeText={setAddress}
         editable={!createOrder.isPending}
       />
 
       {createOrder.isError && (
         <Text className="text-destructive">
-          {"Произошла ошибка, попробуйте снова"}
+          {createOrder.error.message || "Произошла ошибка, попробуйте снова"}
         </Text>
       )}
 

@@ -39,7 +39,13 @@
           }
         }
       ],
-      "expo-secure-store"
+      "expo-secure-store",
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "uDrive использует ваше местоположение, чтобы водитель мог вас найти."
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,

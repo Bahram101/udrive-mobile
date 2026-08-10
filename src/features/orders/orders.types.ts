@@ -15,7 +15,12 @@ export type Order = {
 
 export type CreateOrderPayload = {
   fromAddress: string;
-  toAddress: string;
+  fromLat: number;
+  fromLng: number;
+};
+
+export type CreateOrderInput = {
+  fromAddress: string;
 };
 
 export type OrderStatus =
@@ -31,7 +36,7 @@ export type CreatedOrder = {
   clientId: string;
   driverId: string | null;
   fromAddress: string;
-  toAddress: string;
+  toAddress: string | null;
   status: OrderStatus;
   fromLat: number | null;
   fromLng: number | null;

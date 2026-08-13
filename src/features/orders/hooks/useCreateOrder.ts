@@ -7,12 +7,10 @@ import type { CreateOrderInput } from "../orders.types";
 
 export function useCreateOrder() {
   return useMutation({
-    mutationFn: async ({ fromAddress }: CreateOrderInput) => {
+    mutationFn: async ({ fromAddress, toAddress }: CreateOrderInput) => {
       const { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== Location.PermissionStatus.GRANTED) {
-        throw new Error(
-          "Разрешите доступ к геолокации, чтобы отправить заказ",
-        );
+        throw new Error("Разрешите доступ к геолокации, чтобы отправить заказ");
       }
 
       const position = await Location.getCurrentPositionAsync({
@@ -22,6 +20,7 @@ export function useCreateOrder() {
       try {
         return await ordersService.createOrder({
           fromAddress,
+          toAddress,
           fromLat: position.coords.latitude,
           fromLng: position.coords.longitude,
         });

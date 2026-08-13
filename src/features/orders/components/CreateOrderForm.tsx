@@ -8,17 +8,22 @@ import { VStack } from "@/components/ui/vstack";
 import { useCreateOrder } from "../hooks/useCreateOrder";
 
 export function CreateOrderForm() {
-  const [address, setAddress] = useState("");
+  const [fromAddress, setFromAddress] = useState("");
+  const [toAddress, setToAddress] = useState("");
   const createOrder = useCreateOrder();
 
-  const isValid = address.trim().length > 0;
+  const isValid = fromAddress.trim().length > 0;
 
   function handleSubmit() {
     createOrder.mutate(
-      { fromAddress: address },
+      {
+        fromAddress,
+        toAddress: toAddress.trim() ? toAddress : undefined,
+      },
       {
         onSuccess: () => {
-          setAddress("");
+          setFromAddress("");
+          setToAddress("");
         },
       },
     );
@@ -28,8 +33,15 @@ export function CreateOrderForm() {
     <VStack className="gap-3">
       <AppInput
         placeholder="Ваш адрес"
-        value={address}
-        onChangeText={setAddress}
+        value={fromAddress}
+        onChangeText={setFromAddress}
+        editable={!createOrder.isPending}
+      />
+
+      <AppInput
+        placeholder="Куда (примерно, необязательно)"
+        value={toAddress}
+        onChangeText={setToAddress}
         editable={!createOrder.isPending}
       />
 

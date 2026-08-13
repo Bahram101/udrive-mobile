@@ -15,12 +15,14 @@ export type Order = {
 
 export type CreateOrderPayload = {
   fromAddress: string;
+  toAddress?: string;
   fromLat: number;
   fromLng: number;
 };
 
 export type CreateOrderInput = {
   fromAddress: string;
+  toAddress?: string;
 };
 
 export type OrderStatus =

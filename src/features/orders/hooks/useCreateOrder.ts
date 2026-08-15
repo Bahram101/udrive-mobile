@@ -2,7 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import * as Location from "expo-location";
 
-import { ordersService } from "../api/orders.service";
+import { OrdersService } from "../api/orders.service";
 import type { CreateOrderInput } from "../orders.types";
 
 export function useCreateOrder() {
@@ -18,7 +18,7 @@ export function useCreateOrder() {
       });
 
       try {
-        return await ordersService.createOrder({
+        return await OrdersService.createOrder({
           fromAddress,
           toAddress,
           fromLat: position.coords.latitude,

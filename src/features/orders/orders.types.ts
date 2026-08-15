@@ -1,18 +1,3 @@
-export type Order = {
-  id: string;
-  passengerName: string;
-  rating: number;
-  ratingCount: number;
-  etaMinutes: number;
-  pricePerKm: number;
-  distanceKm: number;
-  price: number;
-  isFairPrice?: boolean;
-  pickup: string;
-  dropoff: string;
-  paymentTag?: string;
-};
-
 export type CreateOrderPayload = {
   fromAddress: string;
   toAddress?: string;
@@ -44,7 +29,7 @@ export type CreatedOrder = {
   fromLng: number | null;
   toLat: number | null;
   toLng: number | null;
-  price: string | null;
+  price: number | null;
   createdAt: string;
   updatedAt: string;
 };

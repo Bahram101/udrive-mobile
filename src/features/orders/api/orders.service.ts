@@ -28,4 +28,11 @@ export const OrdersService = {
     );
     return data.orders;
   },
+
+  async getCurrentClientOrder(): Promise<CreatedOrder | null> {
+    const { data } = await apiClient.get<{ order: CreatedOrder | null }>(
+      "/client/orders/current",
+    );
+    return data.order;
+  },
 };

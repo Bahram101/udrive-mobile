@@ -1,11 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { Tabs } from 'expo-router';
 
-import { useDriverOrderSocket } from '@/features/orders/hooks/useDriverOrderSocket';
-
 export default function DriverLayout() {
-  useDriverOrderSocket();
-
   return (
     <Tabs
       screenOptions={{

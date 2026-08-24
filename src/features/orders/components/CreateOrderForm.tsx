@@ -6,8 +6,13 @@ import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
 
 import { useCreateOrder } from "../hooks/useCreateOrder";
+import type { CreatedOrder } from "../orders.types";
 
-export function CreateOrderForm() {
+type CreateOrderFormProps = {
+  onSuccess?: (order: CreatedOrder) => void;
+};
+
+export function CreateOrderForm({ onSuccess }: CreateOrderFormProps) {
   const [fromAddress, setFromAddress] = useState("");
   const [toAddress, setToAddress] = useState("");
   const createOrder = useCreateOrder();
@@ -21,9 +26,10 @@ export function CreateOrderForm() {
         toAddress: toAddress.trim() ? toAddress : undefined,
       },
       {
-        onSuccess: () => {
+        onSuccess: (response) => {
           setFromAddress("");
           setToAddress("");
+          onSuccess?.(response.order);
         },
       },
     );

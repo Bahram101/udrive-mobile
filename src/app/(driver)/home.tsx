@@ -1,22 +1,31 @@
-import { RefreshControl, ScrollView, View } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { useState } from "react";
+import { Pressable, RefreshControl, ScrollView, View } from "react-native";
 
 import ScreenLayout from "@/components/common/ScreenLayout";
 import { Text } from "@/components/ui/text";
+import { OnlineToggle } from "@/features/driver/components/OnlineToggle";
 import { OrderCard } from "@/features/orders/components/OrderCard";
 import { useNewOrders } from "@/features/orders/hooks/useNewOrders";
 
 export default function DriverOrderFeedScreen() {
-  const newOrders = useNewOrders();
+  const [isOnline, setIsOnline] = useState(false);
+  const newOrders = useNewOrders(isOnline);
   const orders = newOrders.data ?? [];
 
-  console.log("isLoading", newOrders.isLoading);
-
   return (
-    <ScreenLayout>
+    <ScreenLayout
+      topBarCenter={<OnlineToggle isOnline={isOnline} onChange={setIsOnline} />}
+      topBarRight={
+        <Pressable hitSlop={8}>
+          <Ionicons name="settings-outline" size={22} color="#0a0a0a" />
+        </Pressable>
+      }
+    >
       <ScrollView
         showsVerticalScrollIndicator={false}
-        className="-mx-4 flex-1 px-4"
-        contentContainerStyle={{ gap: 12 }}
+        className="-mx-4 flex-1 px-4 "
+        contentContainerStyle={{ gap: 6 }}
         refreshControl={
           <RefreshControl
             refreshing={newOrders.isRefetching}
@@ -29,7 +38,11 @@ export default function DriverOrderFeedScreen() {
         ) : (
           <View className="items-center pt-12">
             <Text className="text-muted-foreground">
-              {newOrders.isLoading ? "Загрузка…" : "Новых заказов пока нет"}
+              {!isOnline
+                ? "Включите линию, чтобы видеть заказы"
+                : newOrders.isLoading
+                  ? "Загрузка…"
+                  : "Новых заказов пока нет"}
             </Text>
           </View>
         )}

@@ -6,22 +6,32 @@ import SideMenu from "@/components/common/SideMenu";
 
 type Props = {
   children: ReactNode;
+  topBarCenter?: ReactNode;
+  topBarRight?: ReactNode;
 };
 
-const ScreenLayout = ({ children }: Props) => {
+const ScreenLayout = ({ children, topBarCenter, topBarRight }: Props) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <View className="flex-1 gap-6 pt-24 px-4">
-      <Pressable
-        onPress={() => setIsMenuOpen(true)}
-        hitSlop={8}
-        className="absolute left-2 top-14 z-10 h-10 w-10 items-center justify-center rounded-full bg-muted"
-      >
-        <Ionicons name="menu" size={24} color="#0a0a0a" />
-      </Pressable>
+    <View className="flex-1 pt-14 px-4">
+      <View className="-mx-4 mb-3 flex-row items-center justify-between border-b border-border px-4 pb-3">
+        <Pressable
+          onPress={() => setIsMenuOpen(true)}
+          hitSlop={8}
+          className="h-10 w-10 items-center justify-center rounded-full bg-muted"
+        >
+          <Ionicons name="menu" size={24} color="#0a0a0a" />
+        </Pressable>
 
-      {children}
+        <View className="flex-1 items-center px-2">{topBarCenter}</View>
+
+        <View className="h-10 w-10 items-center justify-center">
+          {topBarRight}
+        </View>
+      </View>
+
+      <View className="flex-1 gap-6">{children}</View>
 
       <SideMenu visible={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
     </View>

@@ -6,7 +6,7 @@ export function useNewOrders(enabled: boolean) {
   return useQuery({
     queryKey: ["driver", "new-orders"],
     queryFn: () => OrdersService.getNewOrders(),
-    refetchInterval: 5000,
+    // refetchInterval: 5000,
     enabled,
   });
 }

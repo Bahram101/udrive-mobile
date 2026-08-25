@@ -4,12 +4,24 @@ import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
 import { CreateOrderForm } from "@/features/orders/components/CreateOrderForm";
 import { OrderCard } from "@/features/orders/components/OrderCard";
+import { useCancelOrder } from "@/features/orders/hooks/useCancelOrder";
 import { useCurrentClientOrder } from "@/features/orders/hooks/useCurrentClientOrder";
 import { useAuth } from "@/providers/AuthProvider";
 
 export default function ClientHomeScreen() {
   const { user } = useAuth();
   const currentOrder = useCurrentClientOrder();
+  const cancelOrder = useCancelOrder();
+
+  function handleCancel() {
+    if (!currentOrder.data) return;
+
+    // console.log("CurOrder", JSON.stringify(currentOrder, null, 2));
+
+    cancelOrder.mutate(currentOrder.data.id, {
+      onSuccess: () => currentOrder.refetch(),
+    });
+  }
 
   return (
     <ScreenLayout>
@@ -19,9 +31,17 @@ export default function ClientHomeScreen() {
       </VStack>
 
       {currentOrder.data ? (
-        <OrderCard order={currentOrder.data} />
+        <OrderCard
+          order={currentOrder.data}
+          onCancel={handleCancel}
+          isCancelling={cancelOrder.isPending}
+        />
       ) : (
         <CreateOrderForm onSuccess={() => currentOrder.refetch()} />
+      )}
+
+      {cancelOrder.isError && (
+        <Text className="text-destructive">{cancelOrder.error.message}</Text>
       )}
     </ScreenLayout>
   );

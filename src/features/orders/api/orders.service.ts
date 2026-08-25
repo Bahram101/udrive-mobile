@@ -9,7 +9,7 @@ import type {
 export const OrdersService = {
   async createOrder(payload: CreateOrderPayload): Promise<CreateOrderResponse> {
     const { data } = await apiClient.post<CreateOrderResponse>(
-      "/orders",
+      "/client/orders",
       payload,
     );
     return data;
@@ -32,6 +32,13 @@ export const OrdersService = {
   async getCurrentClientOrder(): Promise<CreatedOrder | null> {
     const { data } = await apiClient.get<{ order: CreatedOrder | null }>(
       "/client/orders/current",
+    );
+    return data.order;
+  },
+
+  async cancelOrder(orderId: string): Promise<CreatedOrder> {
+    const { data } = await apiClient.patch<{ order: CreatedOrder }>(
+      `/client/orders/${orderId}/cancel`,
     );
     return data.order;
   },

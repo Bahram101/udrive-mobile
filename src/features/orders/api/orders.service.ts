@@ -42,4 +42,11 @@ export const OrdersService = {
     );
     return data.order;
   },
+
+  async cancelDriverOrder(orderId: string): Promise<CreatedOrder> {
+    const { data } = await apiClient.patch<{ order: CreatedOrder }>(
+      `/driver/orders/${orderId}/cancel`,
+    );
+    return data.order;
+  },
 };

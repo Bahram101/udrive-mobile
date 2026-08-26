@@ -8,6 +8,6 @@ export function useCurrentDriverOrder() {
   return useQuery({
     queryKey: ["driver", "current-order"],
     queryFn: () => OrdersService.getCurrentDriverOrder(),
-    // refetchInterval: 5000,
+    refetchInterval: 5000,
   });
 }

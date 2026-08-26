@@ -8,6 +8,6 @@ export function useCurrentClientOrder() {
   return useQuery({
     queryKey: ["client", "current-order"],
     queryFn: () => OrdersService.getCurrentClientOrder(),
-    // refetchInterval: 5000,
+    refetchInterval: 5000,
   });
 }

@@ -1,21 +1,18 @@
 import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
-import { Pressable, RefreshControl, ScrollView, View } from "react-native";
+import { Pressable, View } from "react-native";
 
 import ScreenLayout from "@/components/common/ScreenLayout";
 import { Heading } from "@/components/ui/heading";
 import { Text } from "@/components/ui/text";
 import { OnlineToggle } from "@/features/driver/components/OnlineToggle";
-import { useCancelDriverOrder } from "@/features/orders/hooks/useCancelDriverOrder";
 import { OrderCard } from "@/features/orders/components/OrderCard";
+import { useCancelDriverOrder } from "@/features/orders/hooks/useCancelDriverOrder";
 import { useCurrentDriverOrder } from "@/features/orders/hooks/useCurrentDriverOrder";
-import { useNewOrders } from "@/features/orders/hooks/useNewOrders";
 
 export default function DriverOrderFeedScreen() {
   const [isOnline, setIsOnline] = useState(false);
   const currentOrder = useCurrentDriverOrder();
-  const newOrders = useNewOrders(isOnline && !currentOrder.data);
-  const orders = newOrders.data ?? [];
   const cancelOrder = useCancelDriverOrder();
 
   function handleCancel() {
@@ -62,7 +59,7 @@ export default function DriverOrderFeedScreen() {
           <Pressable
             onPress={handleCancel}
             disabled={cancelOrder.isPending}
-            className="items-center rounded-2xl border-[1.5px] border-destructive py-3"
+            className="items-center rounded-2xl border-[1.5px] border-destructive py-3 mb-3"
           >
             <Text className="font-semibold text-destructive">
               {cancelOrder.isPending ? "Отменяем…" : "Отменить заказ"}
@@ -70,31 +67,14 @@ export default function DriverOrderFeedScreen() {
           </Pressable>
         </View>
       ) : (
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          className="-mx-4 flex-1 px-4"
-          contentContainerStyle={{ gap: 6 }}
-          refreshControl={
-            <RefreshControl
-              refreshing={newOrders.isRefetching}
-              onRefresh={() => newOrders.refetch()}
-            />
-          }
-        >
-          {orders.length > 0 ? (
-            orders.map((order) => <OrderCard key={order.id} order={order} />)
-          ) : (
-            <View className="items-center pt-12">
-              <Text className="text-muted-foreground">
-                {!isOnline
-                  ? "Включите линию, чтобы видеть заказы"
-                  : newOrders.isLoading
-                    ? "Загрузка…"
-                    : "Новых заказов пока нет"}
-              </Text>
-            </View>
-          )}
-        </ScrollView>
+        <View className="flex-1 items-center justify-center gap-2 px-8">
+          <Ionicons name="time-outline" size={28} color="#737373" />
+          <Text className="text-center text-muted-foreground">
+            {!isOnline
+              ? "Включите линию, чтобы получать заказ"
+              : "Ожидаем заказ…"}
+          </Text>
+        </View>
       )}
     </ScreenLayout>
   );

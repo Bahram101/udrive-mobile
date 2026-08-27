@@ -22,13 +22,6 @@ export const OrdersService = {
     return data.order;
   },
 
-  async getNewOrders(): Promise<CreatedOrder[]> {
-    const { data } = await apiClient.get<{ orders: CreatedOrder[] }>(
-      "/driver/orders/new",
-    );
-    return data.orders;
-  },
-
   async getCurrentClientOrder(): Promise<CreatedOrder | null> {
     const { data } = await apiClient.get<{ order: CreatedOrder | null }>(
       "/client/orders/current",

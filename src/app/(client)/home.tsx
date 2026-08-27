@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { Pressable } from "react-native";
 
 import AppButton from "@/components/common/AppButton";
 import ScreenLayout from "@/components/common/ScreenLayout";
@@ -45,43 +46,55 @@ export default function ClientHomeScreen() {
 
   return (
     <ScreenLayout>
-      <VStack className="gap-2">
+      <VStack className="flex-1 gap-2">
         <Heading size="2xl">Привет, {user?.name}</Heading>
         <Text className="text-muted-foreground">{user?.phone}</Text>
+
+        {driverCancelled && (
+          <VStack className="mt-2 gap-2 rounded-2xl border border-destructive bg-destructive/5 p-4">
+            <Text className="font-semibold text-destructive">
+              Водитель отменил заказ
+            </Text>
+            <Text className="text-sm text-muted-foreground">
+              Не переживайте — можете оформить новый заказ прямо сейчас.
+            </Text>
+            <AppButton
+              variant="outline"
+              onPress={() => setDriverCancelled(false)}
+            >
+              Понятно
+            </AppButton>
+          </VStack>
+        )}
+
+        {currentOrder.data ? (
+          <VStack className="mt-2 flex-1 gap-3">
+            <OrderCard order={currentOrder.data} />
+
+            <VStack className="flex-1" />
+
+            {cancelOrder.isError && (
+              <Text className="text-center text-destructive">
+                {cancelOrder.error.message}
+              </Text>
+            )}
+
+            <Pressable
+              onPress={handleCancel}
+              disabled={cancelOrder.isPending}
+              className="mb-3 items-center rounded-2xl border-[1.5px] border-destructive py-3"
+            >
+              <Text className="font-semibold text-destructive">
+                {cancelOrder.isPending ? "Отменяем…" : "Отменить заказ"}
+              </Text>
+            </Pressable>
+          </VStack>
+        ) : (
+          !driverCancelled && (
+            <CreateOrderForm onSuccess={() => currentOrder.refetch()} />
+          )
+        )}
       </VStack>
-
-      {driverCancelled && (
-        <VStack className="gap-2 rounded-2xl border border-destructive bg-destructive/5 p-4">
-          <Text className="font-semibold text-destructive">
-            Водитель отменил заказ
-          </Text>
-          <Text className="text-sm text-muted-foreground">
-            Не переживайте — можете оформить новый заказ прямо сейчас.
-          </Text>
-          <AppButton
-            variant="outline"
-            onPress={() => setDriverCancelled(false)}
-          >
-            Понятно
-          </AppButton>
-        </VStack>
-      )}
-
-      {currentOrder.data ? (
-        <OrderCard
-          order={currentOrder.data}
-          onCancel={handleCancel}
-          isCancelling={cancelOrder.isPending}
-        />
-      ) : (
-        !driverCancelled && (
-          <CreateOrderForm onSuccess={() => currentOrder.refetch()} />
-        )
-      )}
-
-      {cancelOrder.isError && (
-        <Text className="text-destructive">{cancelOrder.error.message}</Text>
-      )}
     </ScreenLayout>
   );
 }

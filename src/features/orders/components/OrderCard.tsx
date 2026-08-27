@@ -1,5 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
-import { Pressable, View } from "react-native";
+import { View } from "react-native";
 
 import { Text } from "@/components/ui/text";
 
@@ -14,22 +14,11 @@ const STATUS_LABELS: Record<OrderStatus, string> = {
   CANCELLED: "Отменён",
 };
 
-const CANCELLABLE_STATUSES: OrderStatus[] = [
-  "NEW",
-  "ACCEPTED",
-  "ARRIVED",
-  "STARTED",
-];
-
 type OrderCardProps = {
   order: CreatedOrder;
-  onCancel?: () => void;
-  isCancelling?: boolean;
 };
 
-export function OrderCard({ order, onCancel, isCancelling }: OrderCardProps) {
-  const canCancel = onCancel && CANCELLABLE_STATUSES.includes(order.status);
-
+export function OrderCard({ order }: OrderCardProps) {
   return (
     <View className="gap-3 rounded-2xl border border-border bg-muted p-4">
       <View className="flex-row items-center justify-between">
@@ -73,18 +62,6 @@ export function OrderCard({ order, onCancel, isCancelling }: OrderCardProps) {
           </View>
         )}
       </View>
-
-      {canCancel && (
-        <Pressable
-          onPress={onCancel}
-          disabled={isCancelling}
-          className="items-center rounded-xl border border-destructive py-2.5"
-        >
-          <Text className="font-semibold text-destructive">
-            {isCancelling ? "Отменяем…" : "Отменить заказ"}
-          </Text>
-        </Pressable>
-      )}
     </View>
   );
 }

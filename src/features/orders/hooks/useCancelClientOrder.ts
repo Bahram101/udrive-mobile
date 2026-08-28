@@ -3,11 +3,11 @@ import axios from "axios";
 
 import { OrdersService } from "../api/orders.service";
 
-export function useCancelOrder() {
+export function useCancelClientOrder() {
   return useMutation({
     mutationFn: async (orderId: string) => {
       try {
-        return await OrdersService.cancelOrder(orderId);
+        return await OrdersService.cancelClientOrder(orderId);
       } catch (error) {
         if (axios.isAxiosError(error)) {
           const message = (

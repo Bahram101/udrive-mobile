@@ -1,24 +1,4 @@
-export type CreateOrderPayload = {
-  fromAddress: string;
-  toAddress?: string;
-  fromLat: number;
-  fromLng: number;
-};
-
-export type CreateOrderInput = {
-  fromAddress: string;
-  toAddress?: string;
-};
-
-export type OrderStatus =
-  | "NEW"
-  | "ACCEPTED"
-  | "ARRIVED"
-  | "STARTED"
-  | "COMPLETED"
-  | "CANCELLED";
-
-export type CreatedOrder = {
+export type Order = {
   id: string;
   clientId: string;
   driverId: string | null;
@@ -34,6 +14,32 @@ export type CreatedOrder = {
   updatedAt: string;
 };
 
-export type CreateOrderResponse = {
-  order: CreatedOrder;
+export type OrderStatus =
+  | "NEW"
+  | "ACCEPTED"
+  | "ARRIVED"
+  | "STARTED"
+  | "COMPLETED"
+  | "CANCELLED";
+
+export type CreateOrderPayload = {
+  fromAddress: string;
+  fromLat: number;
+  fromLng: number;
+  toAddress?: string;
 };
+
+export type CreateOrderInput = {
+  fromAddress: string;
+  toAddress?: string;
+};
+
+export type OrderResponse = {
+  order: Order;
+};
+
+export type CurrentOrderResponse = {
+  order: Order;
+};
+
+export type CreateOrderResponse = OrderResponse;

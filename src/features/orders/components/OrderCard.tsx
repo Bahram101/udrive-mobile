@@ -3,7 +3,7 @@ import { View } from "react-native";
 
 import { Text } from "@/components/ui/text";
 
-import type { CreatedOrder, OrderStatus } from "../orders.types";
+import type { Order, OrderStatus } from "../orders.types";
 
 const STATUS_LABELS: Record<OrderStatus, string> = {
   NEW: "Ожидает водителя",
@@ -15,7 +15,7 @@ const STATUS_LABELS: Record<OrderStatus, string> = {
 };
 
 type OrderCardProps = {
-  order: CreatedOrder;
+  order: Order;
 };
 
 export function OrderCard({ order }: OrderCardProps) {

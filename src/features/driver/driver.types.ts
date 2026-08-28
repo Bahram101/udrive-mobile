@@ -1,9 +1,3 @@
-export type UpdateDriverStatusPayload = {
-  isOnline: boolean;
-  lat?: number;
-  lng?: number;
-};
-
 export type Driver = {
   id: string;
   userId: string;
@@ -17,6 +11,14 @@ export type Driver = {
   updatedAt: string;
 };
 
-export type UpdateDriverStatusResponse = {
+export type UpdateDriverStatusPayload = {
+  isOnline: boolean;
+  lat?: number;
+  lng?: number;
+};
+
+export type DriverStatusResponse = {
   driver: Driver;
 };
+
+export type UpdateDriverStatusResponse = DriverStatusResponse;

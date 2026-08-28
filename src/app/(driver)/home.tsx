@@ -1,31 +1,32 @@
 import { Ionicons } from "@expo/vector-icons";
-import { useState } from "react";
 import { Pressable, View } from "react-native";
 
 import ScreenLayout from "@/components/common/ScreenLayout";
 import { Heading } from "@/components/ui/heading";
 import { Text } from "@/components/ui/text";
 import { OnlineToggle } from "@/features/driver/components/OnlineToggle";
+import { useDriverStatus } from "@/features/driver/hooks/useDriverStatus";
 import { OrderCard } from "@/features/orders/components/OrderCard";
 import { useCancelDriverOrder } from "@/features/orders/hooks/useCancelDriverOrder";
 import { useCurrentDriverOrder } from "@/features/orders/hooks/useCurrentDriverOrder";
 
 export default function DriverOrderFeedScreen() {
-  const [isOnline, setIsOnline] = useState(false);
+  const driverStatus = useDriverStatus();
+  const isOnline = driverStatus.data?.driver.isOnline ?? false;
   const currentOrder = useCurrentDriverOrder();
   const cancelOrder = useCancelDriverOrder();
 
-  function handleCancel() {
+  const handleCancel = () => {
     if (!currentOrder.data) return;
 
     cancelOrder.mutate(currentOrder.data.id, {
       onSuccess: () => currentOrder.refetch(),
     });
-  }
+  };
 
   return (
     <ScreenLayout
-      topBarCenter={<OnlineToggle isOnline={isOnline} onChange={setIsOnline} />}
+      topBarCenter={<OnlineToggle />}
       topBarRight={
         <Pressable hitSlop={8}>
           <Ionicons name="settings-outline" size={22} color="#0a0a0a" />
@@ -35,6 +36,7 @@ export default function DriverOrderFeedScreen() {
       {currentOrder.data ? (
         <View className="flex-1 gap-3">
           <Heading size="lg">Ваш заказ</Heading>
+
           <OrderCard order={currentOrder.data} />
 
           <View className="items-center gap-2 pt-2">

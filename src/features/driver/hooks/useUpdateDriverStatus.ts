@@ -1,10 +1,13 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import * as Location from "expo-location";
 
 import { DriverService } from "../api/driver.service";
+import type { UpdateDriverStatusResponse } from "../driver.types";
 
 export function useUpdateDriverStatus() {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: async (isOnline: boolean) => {
       try {
@@ -37,6 +40,12 @@ export function useUpdateDriverStatus() {
         }
         throw error;
       }
+    },
+    onSuccess: (response) => {
+      queryClient.setQueryData<UpdateDriverStatusResponse>(
+        ["driver", "status"],
+        response,
+      );
     },
   });
 }

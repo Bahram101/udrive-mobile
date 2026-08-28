@@ -1,7 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { ReactNode, useState } from "react";
 import { Pressable, View } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import SideMenu from "@/components/common/SideMenu";
 
@@ -13,13 +12,9 @@ type Props = {
 
 const ScreenLayout = ({ children, topBarCenter, topBarRight }: Props) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const insets = useSafeAreaInsets();
 
   return (
-    <View
-      className="flex-1 pt-14 px-4"
-      style={{ paddingBottom: insets.bottom }}
-    >
+    <View className="flex-1 pt-14 px-4">
       <View className="-mx-4 mb-3 flex-row items-center justify-between border-b border-border px-4 pb-3">
         <Pressable
           onPress={() => setIsMenuOpen(true)}

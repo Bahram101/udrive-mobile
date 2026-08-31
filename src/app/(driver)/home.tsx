@@ -6,6 +6,7 @@ import { Heading } from "@/components/ui/heading";
 import { Text } from "@/components/ui/text";
 import { OnlineToggle } from "@/features/driver/components/OnlineToggle";
 import { useDriverStatus } from "@/features/driver/hooks/useDriverStatus";
+import { DriverOrderMap } from "@/features/orders/components/DriverOrderMap";
 import { OrderCard } from "@/features/orders/components/OrderCard";
 import { useCancelDriverOrder } from "@/features/orders/hooks/useCancelDriverOrder";
 import { useCurrentDriverOrder } from "@/features/orders/hooks/useCurrentDriverOrder";
@@ -24,6 +25,8 @@ export default function DriverOrderFeedScreen() {
     });
   };
 
+  // console.log("currentOrder", JSON.stringify(currentOrder, null, 2));
+
   return (
     <ScreenLayout
       topBarCenter={<OnlineToggle />}
@@ -39,16 +42,7 @@ export default function DriverOrderFeedScreen() {
 
           <OrderCard order={currentOrder.data} />
 
-          <View className="items-center gap-2 pt-2">
-            <Ionicons name="navigate-outline" size={26} color="#737373" />
-            <Text className="text-center text-sm font-semibold">
-              Едьте по адресу выше
-            </Text>
-            <Text className="max-w-52.5 text-center text-xs text-muted-foreground">
-              Клиент ждёт вас по указанному адресу. Статус обновится, когда вы
-              приедете.
-            </Text>
-          </View>
+          <DriverOrderMap order={currentOrder.data} />
 
           <View className="flex-1" />
 

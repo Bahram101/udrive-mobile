@@ -12,6 +12,7 @@ export type Order = {
   price: number | null;
   createdAt: string;
   updatedAt: string;
+  driver?: { lat: number | null; lng: number | null } | null;
 };
 
 export type OrderStatus =

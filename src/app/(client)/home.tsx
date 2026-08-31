@@ -2,12 +2,13 @@ import { useEffect, useRef, useState } from "react";
 import { Pressable } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-import AppButton from "@/components/common/AppButton";
 import ScreenLayout from "@/components/common/ScreenLayout";
 import { Heading } from "@/components/ui/heading";
 import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
+import { ClientOrderMap } from "@/features/orders/components/ClientOrderMap";
 import { CreateOrderForm } from "@/features/orders/components/CreateOrderForm";
+import { DriverCancelledNotice } from "@/features/orders/components/DriverCancelledNotice";
 import { OrderCard } from "@/features/orders/components/OrderCard";
 import { useCancelClientOrder } from "@/features/orders/hooks/useCancelClientOrder";
 import { useCurrentClientOrder } from "@/features/orders/hooks/useCurrentClientOrder";
@@ -17,8 +18,6 @@ export default function ClientHomeScreen() {
   const { user } = useAuth();
   const insets = useSafeAreaInsets();
   const currentOrder = useCurrentClientOrder();
-
-  console.log("currentOrder", JSON.stringify(currentOrder, null, 2));
   const cancelOrder = useCancelClientOrder();
 
   const lastOrderId = useRef<string | null>(null);
@@ -55,25 +54,14 @@ export default function ClientHomeScreen() {
         <Text className="text-muted-foreground">{user?.phone}</Text>
 
         {driverCancelled && (
-          <VStack className="mt-2 gap-2 rounded-2xl border border-destructive bg-destructive/5 p-4">
-            <Text className="font-semibold text-destructive">
-              Водитель отменил заказ
-            </Text>
-            <Text className="text-sm text-muted-foreground">
-              Не переживайте — можете оформить новый заказ прямо сейчас.
-            </Text>
-            <AppButton
-              variant="outline"
-              onPress={() => setDriverCancelled(false)}
-            >
-              Понятно
-            </AppButton>
-          </VStack>
+          <DriverCancelledNotice onDismiss={() => setDriverCancelled(false)} />
         )}
 
         {currentOrder.data ? (
           <VStack className="mt-2 flex-1 gap-3">
             <OrderCard order={currentOrder.data} />
+
+            <ClientOrderMap order={currentOrder.data} />
 
             <VStack className="flex-1" />
 

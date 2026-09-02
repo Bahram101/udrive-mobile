@@ -19,6 +19,7 @@ type ClientOrderMapProps = {
 
 export function ClientOrderMap({ order }: ClientOrderMapProps) {
   const mapRef = useRef<MapView>(null);
+  const hasFitted = useRef(false);
 
   const clientPosition: Coordinates | null =
     order.fromLat != null && order.fromLng != null
@@ -31,8 +32,10 @@ export function ClientOrderMap({ order }: ClientOrderMapProps) {
       : null;
 
   useEffect(() => {
-    if (!mapRef.current || !driverPosition || !clientPosition) return;
+    if (hasFitted.current || !mapRef.current || !driverPosition || !clientPosition)
+      return;
 
+    hasFitted.current = true;
     mapRef.current.fitToCoordinates([driverPosition, clientPosition], {
       edgePadding: { top: 60, right: 60, bottom: 60, left: 60 },
       animated: true,

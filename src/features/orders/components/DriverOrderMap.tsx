@@ -22,6 +22,7 @@ type DriverOrderMapProps = {
 
 export function DriverOrderMap({ order }: DriverOrderMapProps) {
   const mapRef = useRef<MapView>(null);
+  const hasFitted = useRef(false);
   const [driverPosition, setDriverPosition] = useState<Coordinates | null>(
     null,
   );
@@ -62,8 +63,10 @@ export function DriverOrderMap({ order }: DriverOrderMapProps) {
       : null;
 
   useEffect(() => {
-    if (!mapRef.current || !driverPosition || !clientPosition) return;
+    if (hasFitted.current || !mapRef.current || !driverPosition || !clientPosition)
+      return;
 
+    hasFitted.current = true;
     mapRef.current.fitToCoordinates([driverPosition, clientPosition], {
       edgePadding: { top: 60, right: 60, bottom: 60, left: 60 },
       animated: true,

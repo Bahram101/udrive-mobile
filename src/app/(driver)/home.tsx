@@ -7,6 +7,7 @@ import { Text } from "@/components/ui/text";
 import { OnlineToggle } from "@/features/driver/components/OnlineToggle";
 import { useDriverStatus } from "@/features/driver/hooks/useDriverStatus";
 import { DriverOrderMap } from "@/features/orders/components/DriverOrderMap";
+import { DriverOrderStatusAction } from "@/features/orders/components/DriverOrderStatusAction";
 import { OrderCard } from "@/features/orders/components/OrderCard";
 import { useCancelDriverOrder } from "@/features/orders/hooks/useCancelDriverOrder";
 import { useCurrentDriverOrder } from "@/features/orders/hooks/useCurrentDriverOrder";
@@ -51,6 +52,11 @@ export default function DriverOrderFeedScreen() {
               {cancelOrder.error.message}
             </Text>
           )}
+
+          <DriverOrderStatusAction
+            order={currentOrder.data}
+            onUpdated={() => currentOrder.refetch()}
+          />
 
           <Pressable
             onPress={handleCancel}

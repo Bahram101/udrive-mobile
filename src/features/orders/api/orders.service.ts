@@ -44,4 +44,25 @@ export const OrdersService = {
     );
     return data.order;
   },
+
+  async markOrderArrived(orderId: string): Promise<Order> {
+    const { data } = await apiClient.patch<OrderResponse>(
+      `/driver/orders/${orderId}/arrive`,
+    );
+    return data.order;
+  },
+
+  async startOrder(orderId: string): Promise<Order> {
+    const { data } = await apiClient.patch<OrderResponse>(
+      `/driver/orders/${orderId}/start`,
+    );
+    return data.order;
+  },
+
+  async completeOrder(orderId: string): Promise<Order> {
+    const { data } = await apiClient.patch<OrderResponse>(
+      `/driver/orders/${orderId}/complete`,
+    );
+    return data.order;
+  },
 };

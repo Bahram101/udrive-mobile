@@ -66,7 +66,7 @@ export function CreateOrderForm({ onSuccess }: CreateOrderFormProps) {
         isDisabled={!isValid || createOrder.isPending}
         isLoading={createOrder.isPending}
       >
-        Отправить
+        Заказать такси
       </AppButton>
     </VStack>
   );

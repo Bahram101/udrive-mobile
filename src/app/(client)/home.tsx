@@ -10,6 +10,7 @@ import { ClientOrderMap } from "@/features/orders/components/ClientOrderMap";
 import { CreateOrderForm } from "@/features/orders/components/CreateOrderForm";
 import { DriverCancelledNotice } from "@/features/orders/components/DriverCancelledNotice";
 import { OrderCard } from "@/features/orders/components/OrderCard";
+import { OrderCompletedNotice } from "@/features/orders/components/OrderCompletedNotice";
 import { useCancelClientOrder } from "@/features/orders/hooks/useCancelClientOrder";
 import { useCurrentClientOrder } from "@/features/orders/hooks/useCurrentClientOrder";
 import { useAuth } from "@/providers/AuthProvider";
@@ -21,20 +22,28 @@ export default function ClientHomeScreen() {
   const cancelOrder = useCancelClientOrder();
 
   const lastOrderId = useRef<string | null>(null);
+  const lastOrderStatus = useRef<string | null>(null);
   const selfCancelled = useRef(false);
   const [driverCancelled, setDriverCancelled] = useState(false);
+  const [tripCompleted, setTripCompleted] = useState(false);
 
   useEffect(() => {
     if (currentOrder.data) {
       lastOrderId.current = currentOrder.data.id;
+      lastOrderStatus.current = currentOrder.data.status;
       return;
     }
 
     if (lastOrderId.current && !selfCancelled.current) {
-      setDriverCancelled(true);
+      if (lastOrderStatus.current === "STARTED") {
+        setTripCompleted(true);
+      } else {
+        setDriverCancelled(true);
+      }
     }
 
     lastOrderId.current = null;
+    lastOrderStatus.current = null;
     selfCancelled.current = false;
   }, [currentOrder.data]);
 
@@ -55,6 +64,10 @@ export default function ClientHomeScreen() {
 
         {driverCancelled && (
           <DriverCancelledNotice onDismiss={() => setDriverCancelled(false)} />
+        )}
+
+        {tripCompleted && (
+          <OrderCompletedNotice onDismiss={() => setTripCompleted(false)} />
         )}
 
         {currentOrder.data ? (
@@ -83,7 +96,8 @@ export default function ClientHomeScreen() {
             </Pressable>
           </VStack>
         ) : (
-          !driverCancelled && (
+          !driverCancelled &&
+          !tripCompleted && (
             <CreateOrderForm onSuccess={() => currentOrder.refetch()} />
           )
         )}

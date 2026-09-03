@@ -82,7 +82,7 @@ export function DriverOrderMap({ order }: DriverOrderMapProps) {
   if (!clientPosition) return null;
 
   return (
-    <View className="h-[70%] overflow-hidden rounded-2xl border border-border">
+    <View className="flex-1">
       <MapView
         ref={mapRef}
         style={StyleSheet.absoluteFillObject}

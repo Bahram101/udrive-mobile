@@ -8,9 +8,8 @@ import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
 import { ClientOrderMap } from "@/features/orders/components/ClientOrderMap";
 import { CreateOrderForm } from "@/features/orders/components/CreateOrderForm";
-import { DriverCancelledNotice } from "@/features/orders/components/DriverCancelledNotice";
 import { OrderCard } from "@/features/orders/components/OrderCard";
-import { OrderCompletedNotice } from "@/features/orders/components/OrderCompletedNotice";
+import { OrderNotice } from "@/features/orders/components/OrderNotice";
 import { useCancelClientOrder } from "@/features/orders/hooks/useCancelClientOrder";
 import { useCurrentClientOrder } from "@/features/orders/hooks/useCurrentClientOrder";
 import { useAuth } from "@/providers/AuthProvider";
@@ -63,11 +62,21 @@ export default function ClientHomeScreen() {
         <Text className="text-muted-foreground">{user?.phone}</Text>
 
         {driverCancelled && (
-          <DriverCancelledNotice onDismiss={() => setDriverCancelled(false)} />
+          <OrderNotice
+            tone="destructive"
+            title="Водитель отменил заказ"
+            description="Не переживайте — можете оформить новый заказ прямо сейчас."
+            onDismiss={() => setDriverCancelled(false)}
+          />
         )}
 
         {tripCompleted && (
-          <OrderCompletedNotice onDismiss={() => setTripCompleted(false)} />
+          <OrderNotice
+            tone="success"
+            title="Поездка завершена"
+            description="Спасибо, что выбрали uDrive!"
+            onDismiss={() => setTripCompleted(false)}
+          />
         )}
 
         {currentOrder.data ? (

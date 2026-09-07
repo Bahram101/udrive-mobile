@@ -7,7 +7,7 @@ import { OnlineToggle } from "@/features/driver/components/OnlineToggle";
 import { useDriverStatus } from "@/features/driver/hooks/useDriverStatus";
 import { DriverOrderMap } from "@/features/orders/components/DriverOrderMap";
 import { DriverOrderSheet } from "@/features/orders/components/DriverOrderSheet";
-import { useCancelDriverOrder } from "@/features/orders/hooks/useCancelDriverOrder";
+import { useCancelDriverOrder } from "@/features/orders/hooks/useDriverOrderActions";
 import { useCurrentDriverOrder } from "@/features/orders/hooks/useCurrentDriverOrder";
 
 export default function DriverOrderFeedScreen() {

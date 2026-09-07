@@ -1,6 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
-import axios from "axios";
 import * as Location from "expo-location";
+
+import { withNormalizedError } from "@/lib/api/withNormalizedError";
 
 import { OrdersService } from "../api/orders.service";
 import type { CreateOrderInput } from "../orders.types";
@@ -17,22 +18,14 @@ export function useCreateOrder() {
         accuracy: Location.Accuracy.Balanced,
       });
 
-      try {
-        return await OrdersService.createOrder({
+      return withNormalizedError(() =>
+        OrdersService.createOrder({
           fromAddress,
           toAddress,
           fromLat: position.coords.latitude,
           fromLng: position.coords.longitude,
-        });
-      } catch (error) {
-        if (axios.isAxiosError(error)) {
-          const message = (
-            error.response?.data as { error?: string } | undefined
-          )?.error;
-          throw new Error(message ?? error.message);
-        }
-        throw error;
-      }
+        }),
+      );
     },
   });
 }

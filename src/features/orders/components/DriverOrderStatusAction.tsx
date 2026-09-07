@@ -1,9 +1,11 @@
 import AppButton from "@/components/common/AppButton";
 import { Text } from "@/components/ui/text";
 
-import { useCompleteOrder } from "../hooks/useCompleteOrder";
-import { useMarkOrderArrived } from "../hooks/useMarkOrderArrived";
-import { useStartOrder } from "../hooks/useStartOrder";
+import {
+  useCompleteOrder,
+  useMarkOrderArrived,
+  useStartOrder,
+} from "../hooks/useDriverOrderActions";
 import type { Order } from "../orders.types";
 
 type DriverOrderStatusActionProps = {

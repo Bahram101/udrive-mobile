@@ -6,7 +6,8 @@ import { Text } from "@/components/ui/text";
 import { OnlineToggle } from "@/features/driver/components/OnlineToggle";
 import { useDriverStatus } from "@/features/driver/hooks/useDriverStatus";
 import { DriverOrderMap } from "@/features/orders/components/DriverOrderMap";
-import { DriverOrderSheet } from "@/features/orders/components/DriverOrderSheet";
+import { DriverOrderStatusAction } from "@/features/orders/components/DriverOrderStatusAction";
+import { OrderSheet } from "@/features/orders/components/OrderSheet";
 import { useCancelDriverOrder } from "@/features/orders/hooks/useDriverOrderActions";
 import { useCurrentDriverOrder } from "@/features/orders/hooks/useCurrentDriverOrder";
 
@@ -39,13 +40,17 @@ export default function DriverOrderFeedScreen() {
       >
         <DriverOrderMap order={currentOrder.data} />
 
-        <DriverOrderSheet
+        <OrderSheet
           order={currentOrder.data}
-          onUpdated={() => currentOrder.refetch()}
           onCancel={handleCancel}
           isCancelling={cancelOrder.isPending}
           cancelErrorMessage={cancelOrder.error?.message}
-        />
+        >
+          <DriverOrderStatusAction
+            order={currentOrder.data}
+            onUpdated={() => currentOrder.refetch()}
+          />
+        </OrderSheet>
       </ScreenLayout>
     );
   }

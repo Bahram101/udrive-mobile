@@ -1,28 +1,29 @@
 import BottomSheet, { BottomSheetView } from "@gorhom/bottom-sheet";
-import { useMemo } from "react";
+import { useMemo, type ReactNode } from "react";
 import { Pressable } from "react-native";
 
 import { Text } from "@/components/ui/text";
 
-import type { Order } from "../orders.types";
-import { DriverOrderStatusAction } from "./DriverOrderStatusAction";
 import { OrderCard } from "./OrderCard";
+import type { Order } from "../orders.types";
 
-type DriverOrderSheetProps = {
+type OrderSheetProps = {
   order: Order;
-  onUpdated: () => void;
   onCancel: () => void;
   isCancelling: boolean;
   cancelErrorMessage?: string;
+  // Extra content between the order card and the cancel button
+  // (e.g. the driver's status action button).
+  children?: ReactNode;
 };
 
-export function DriverOrderSheet({
+export function OrderSheet({
   order,
-  onUpdated,
   onCancel,
   isCancelling,
   cancelErrorMessage,
-}: DriverOrderSheetProps) {
+  children,
+}: OrderSheetProps) {
   const snapPoints = useMemo(() => ["26%", "40%"], []);
 
   return (
@@ -35,7 +36,7 @@ export function DriverOrderSheet({
       <BottomSheetView className="flex-1 gap-3 px-4 pb-6">
         <OrderCard order={order} />
 
-        <DriverOrderStatusAction order={order} onUpdated={onUpdated} />
+        {children}
 
         {cancelErrorMessage && (
           <Text className="text-center text-destructive">

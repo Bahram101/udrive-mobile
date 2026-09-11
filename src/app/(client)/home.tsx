@@ -6,9 +6,9 @@ import ScreenLayout from "@/components/common/ScreenLayout";
 import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
 import { ClientOrderMap } from "@/features/orders/components/ClientOrderMap";
-import { ClientOrderSheet } from "@/features/orders/components/ClientOrderSheet";
 import { CreateOrderForm } from "@/features/orders/components/CreateOrderForm";
 import { OrderNotice } from "@/features/orders/components/OrderNotice";
+import { OrderSheet } from "@/features/orders/components/OrderSheet";
 import { useCancelClientOrder } from "@/features/orders/hooks/useCancelClientOrder";
 import { useCurrentClientOrder } from "@/features/orders/hooks/useCurrentClientOrder";
 
@@ -63,7 +63,7 @@ export default function ClientHomeScreen() {
       >
         <ClientOrderMap order={currentOrder.data} />
 
-        <ClientOrderSheet
+        <OrderSheet
           order={currentOrder.data}
           onCancel={handleCancel}
           isCancelling={cancelOrder.isPending}

@@ -5,8 +5,8 @@ import { Pressable } from "react-native";
 import ScreenLayout from "@/components/common/ScreenLayout";
 import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
-import { ClientOrderMap } from "@/features/orders/components/ClientOrderMap";
 import { CreateOrderForm } from "@/features/orders/components/CreateOrderForm";
+import { OrderMap } from "@/features/orders/components/OrderMap";
 import { OrderNotice } from "@/features/orders/components/OrderNotice";
 import { OrderSheet } from "@/features/orders/components/OrderSheet";
 import { useCancelClientOrder } from "@/features/orders/hooks/useCancelClientOrder";
@@ -61,7 +61,7 @@ export default function ClientHomeScreen() {
           </Pressable>
         }
       >
-        <ClientOrderMap order={currentOrder.data} />
+        <OrderMap order={currentOrder.data} role="client" />
 
         <OrderSheet
           order={currentOrder.data}

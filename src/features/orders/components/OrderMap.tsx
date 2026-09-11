@@ -16,21 +16,24 @@ type Coordinates = {
   longitude: number;
 };
 
-type DriverOrderMapProps = {
+type OrderMapProps = {
   order: Order;
+  role: "driver" | "client";
 };
 
-export function DriverOrderMap({ order }: DriverOrderMapProps) {
+export function OrderMap({ order, role }: OrderMapProps) {
   const mapRef = useRef<MapView>(null);
   const hasFitted = useRef(false);
-  const [driverPosition, setDriverPosition] = useState<Coordinates | null>(
+  const [ownLivePosition, setOwnLivePosition] = useState<Coordinates | null>(
     null,
   );
 
   useEffect(() => {
+    if (role !== "driver") return;
+
     let subscription: Location.LocationSubscription | null = null;
 
-    async function watchDriverPosition() {
+    async function watchOwnPosition() {
       const { status } = await Location.getForegroundPermissionsAsync();
       if (status !== Location.PermissionStatus.GRANTED) return;
 
@@ -42,7 +45,7 @@ export function DriverOrderMap({ order }: DriverOrderMapProps) {
         },
         (position) => {
           const { latitude, longitude } = position.coords;
-          setDriverPosition({ latitude, longitude });
+          setOwnLivePosition({ latitude, longitude });
           DriverService.updateStatus({
             isOnline: true,
             lat: latitude,
@@ -52,15 +55,22 @@ export function DriverOrderMap({ order }: DriverOrderMapProps) {
       );
     }
 
-    watchDriverPosition();
+    watchOwnPosition();
 
     return () => subscription?.remove();
-  }, []);
+  }, [role]);
 
   const clientPosition: Coordinates | null =
     order.fromLat != null && order.fromLng != null
       ? { latitude: order.fromLat, longitude: order.fromLng }
       : null;
+
+  const driverPosition: Coordinates | null =
+    role === "driver"
+      ? ownLivePosition
+      : order.driver?.lat != null && order.driver?.lng != null
+        ? { latitude: order.driver.lat, longitude: order.driver.lng }
+        : null;
 
   useEffect(() => {
     if (
@@ -84,7 +94,7 @@ export function DriverOrderMap({ order }: DriverOrderMapProps) {
     clientPosition?.longitude,
   ]);
 
-  if (!clientPosition) return null;
+  if (!clientPosition || !order.driverId) return null;
 
   return (
     <View className="flex-1">
@@ -101,12 +111,22 @@ export function DriverOrderMap({ order }: DriverOrderMapProps) {
           longitudeDelta: 0.02,
         }}
       >
-        <Marker
-          coordinate={clientPosition}
-          title="Клиент"
-          description={order.fromAddress}
-          pinColor="#3f6212"
-        />
+        {role === "driver" ? (
+          <Marker
+            coordinate={clientPosition}
+            title="Клиент"
+            description={order.fromAddress}
+            pinColor="#3f6212"
+          />
+        ) : (
+          driverPosition && (
+            <Marker
+              coordinate={driverPosition}
+              title="Водитель"
+              pinColor="#0ea5e9"
+            />
+          )
+        )}
       </MapView>
     </View>
   );

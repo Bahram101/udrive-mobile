@@ -5,8 +5,8 @@ import ScreenLayout from "@/components/common/ScreenLayout";
 import { Text } from "@/components/ui/text";
 import { OnlineToggle } from "@/features/driver/components/OnlineToggle";
 import { useDriverStatus } from "@/features/driver/hooks/useDriverStatus";
-import { DriverOrderMap } from "@/features/orders/components/DriverOrderMap";
 import { DriverOrderStatusAction } from "@/features/orders/components/DriverOrderStatusAction";
+import { OrderMap } from "@/features/orders/components/OrderMap";
 import { OrderSheet } from "@/features/orders/components/OrderSheet";
 import { useCancelDriverOrder } from "@/features/orders/hooks/useDriverOrderActions";
 import { useCurrentDriverOrder } from "@/features/orders/hooks/useCurrentDriverOrder";
@@ -38,7 +38,7 @@ export default function DriverOrderFeedScreen() {
         topBarCenter={<OnlineToggle />}
         topBarRight={settingsButton}
       >
-        <DriverOrderMap order={currentOrder.data} />
+        <OrderMap order={currentOrder.data} role="driver" />
 
         <OrderSheet
           order={currentOrder.data}

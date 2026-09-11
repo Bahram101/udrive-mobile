@@ -8,13 +8,13 @@ import { useDriverStatus } from "@/features/driver/hooks/useDriverStatus";
 import { DriverOrderStatusAction } from "@/features/orders/components/DriverOrderStatusAction";
 import { OrderMap } from "@/features/orders/components/OrderMap";
 import { OrderSheet } from "@/features/orders/components/OrderSheet";
+import { useCurrentOrder } from "@/features/orders/hooks/useCurrentOrder";
 import { useCancelDriverOrder } from "@/features/orders/hooks/useDriverOrderActions";
-import { useCurrentDriverOrder } from "@/features/orders/hooks/useCurrentDriverOrder";
 
 export default function DriverOrderFeedScreen() {
   const driverStatus = useDriverStatus();
   const isOnline = driverStatus.data?.driver.isOnline ?? false;
-  const currentOrder = useCurrentDriverOrder();
+  const currentOrder = useCurrentOrder("driver");
   const cancelOrder = useCancelDriverOrder();
 
   const handleCancel = () => {

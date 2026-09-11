@@ -10,10 +10,10 @@ import { OrderMap } from "@/features/orders/components/OrderMap";
 import { OrderNotice } from "@/features/orders/components/OrderNotice";
 import { OrderSheet } from "@/features/orders/components/OrderSheet";
 import { useCancelClientOrder } from "@/features/orders/hooks/useCancelClientOrder";
-import { useCurrentClientOrder } from "@/features/orders/hooks/useCurrentClientOrder";
+import { useCurrentOrder } from "@/features/orders/hooks/useCurrentOrder";
 
 export default function ClientHomeScreen() {
-  const currentOrder = useCurrentClientOrder();
+  const currentOrder = useCurrentOrder("client");
   const cancelOrder = useCancelClientOrder();
 
   const lastOrderId = useRef<string | null>(null);

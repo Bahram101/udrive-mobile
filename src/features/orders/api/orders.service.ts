@@ -17,16 +17,9 @@ export const OrdersService = {
     return data.order;
   },
 
-  async getCurrentDriverOrder(): Promise<Order | null> {
+  async getCurrentOrder(role: "driver" | "client"): Promise<Order | null> {
     const { data } = await apiClient.get<CurrentOrderResponse>(
-      "/driver/orders/current",
-    );
-    return data.order;
-  },
-
-  async getCurrentClientOrder(): Promise<Order | null> {
-    const { data } = await apiClient.get<CurrentOrderResponse>(
-      "/client/orders/current",
+      `/${role}/orders/current`,
     );
     return data.order;
   },

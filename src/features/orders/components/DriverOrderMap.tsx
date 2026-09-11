@@ -63,7 +63,12 @@ export function DriverOrderMap({ order }: DriverOrderMapProps) {
       : null;
 
   useEffect(() => {
-    if (hasFitted.current || !mapRef.current || !driverPosition || !clientPosition)
+    if (
+      hasFitted.current ||
+      !mapRef.current ||
+      !driverPosition ||
+      !clientPosition
+    )
       return;
 
     hasFitted.current = true;
@@ -85,7 +90,7 @@ export function DriverOrderMap({ order }: DriverOrderMapProps) {
     <View className="flex-1">
       <MapView
         ref={mapRef}
-        style={StyleSheet.absoluteFillObject}
+        style={StyleSheet.absoluteFill}
         provider={
           Platform.OS === "android" ? PROVIDER_GOOGLE : PROVIDER_DEFAULT
         }

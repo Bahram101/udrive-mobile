@@ -24,9 +24,19 @@ export default function DriverOrderFeedScreen() {
     });
   };
 
+  const settingsButton = (
+    <Pressable hitSlop={8}>
+      <Ionicons name="settings-outline" size={22} color="#0a0a0a" />
+    </Pressable>
+  );
+
   if (currentOrder.data) {
     return (
-      <View className="flex-1">
+      <ScreenLayout
+        floatingHeader
+        topBarCenter={<OnlineToggle />}
+        topBarRight={settingsButton}
+      >
         <DriverOrderMap order={currentOrder.data} />
 
         <DriverOrderSheet
@@ -36,19 +46,12 @@ export default function DriverOrderFeedScreen() {
           isCancelling={cancelOrder.isPending}
           cancelErrorMessage={cancelOrder.error?.message}
         />
-      </View>
+      </ScreenLayout>
     );
   }
 
   return (
-    <ScreenLayout
-      topBarCenter={<OnlineToggle />}
-      topBarRight={
-        <Pressable hitSlop={8}>
-          <Ionicons name="settings-outline" size={22} color="#0a0a0a" />
-        </Pressable>
-      }
-    >
+    <ScreenLayout topBarCenter={<OnlineToggle />} topBarRight={settingsButton}>
       <View className="flex-1 items-center justify-center gap-2 px-8">
         <Ionicons name="time-outline" size={28} color="#737373" />
         <Text className="text-center text-muted-foreground">

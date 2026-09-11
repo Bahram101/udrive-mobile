@@ -20,6 +20,7 @@ type AuthContextValue = {
   signIn: (payload: VerifyOtpPayload) => Promise<AuthUser>;
   signOut: () => Promise<void>;
   refreshUser: () => Promise<AuthUser>;
+  switchRole: () => Promise<AuthUser>;
 };
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -74,6 +75,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return authUser;
   }
 
+  async function switchRole() {
+    const {
+      accessToken,
+      refreshToken,
+      user: authUser,
+    } = await authService.switchRole();
+    await Promise.all([
+      tokenStorage.setTokens(accessToken, refreshToken),
+      userStorage.setUser(authUser),
+    ]);
+    setUser(authUser);
+    return authUser;
+  }
+
   return (
     <AuthContext.Provider
       value={useMemo(
@@ -84,6 +99,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           signIn,
           signOut,
           refreshUser,
+          switchRole,
         }),
         [user, isLoading],
       )}

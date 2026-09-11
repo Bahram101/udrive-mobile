@@ -1,22 +1,18 @@
+import { Ionicons } from "@expo/vector-icons";
 import { useEffect, useRef, useState } from "react";
 import { Pressable } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import ScreenLayout from "@/components/common/ScreenLayout";
-import { Heading } from "@/components/ui/heading";
 import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
 import { ClientOrderMap } from "@/features/orders/components/ClientOrderMap";
+import { ClientOrderSheet } from "@/features/orders/components/ClientOrderSheet";
 import { CreateOrderForm } from "@/features/orders/components/CreateOrderForm";
-import { OrderCard } from "@/features/orders/components/OrderCard";
 import { OrderNotice } from "@/features/orders/components/OrderNotice";
 import { useCancelClientOrder } from "@/features/orders/hooks/useCancelClientOrder";
 import { useCurrentClientOrder } from "@/features/orders/hooks/useCurrentClientOrder";
-import { useAuth } from "@/providers/AuthProvider";
 
 export default function ClientHomeScreen() {
-  const { user } = useAuth();
-  const insets = useSafeAreaInsets();
   const currentOrder = useCurrentClientOrder();
   const cancelOrder = useCancelClientOrder();
 
@@ -55,12 +51,31 @@ export default function ClientHomeScreen() {
     });
   }
 
+  if (currentOrder.data?.driverId) {
+    return (
+      <ScreenLayout
+        floatingHeader
+        topBarRight={
+          <Pressable hitSlop={8}>
+            <Ionicons name="settings-outline" size={22} color="#0a0a0a" />
+          </Pressable>
+        }
+      >
+        <ClientOrderMap order={currentOrder.data} />
+
+        <ClientOrderSheet
+          order={currentOrder.data}
+          onCancel={handleCancel}
+          isCancelling={cancelOrder.isPending}
+          cancelErrorMessage={cancelOrder.error?.message}
+        />
+      </ScreenLayout>
+    );
+  }
+
   return (
     <ScreenLayout>
       <VStack className="flex-1 gap-2">
-        <Heading size="2xl">Привет, {user?.name}</Heading>
-        <Text className="text-muted-foreground">{user?.phone}</Text>
-
         {driverCancelled && (
           <OrderNotice
             tone="destructive"
@@ -80,12 +95,11 @@ export default function ClientHomeScreen() {
         )}
 
         {currentOrder.data ? (
-          <VStack className="mt-2 flex-1 gap-3">
-            <OrderCard order={currentOrder.data} />
-
-            <ClientOrderMap order={currentOrder.data} />
-
-            <VStack className="flex-1" />
+          <VStack className="mt-2 flex-1 items-center justify-center gap-2">
+            <Ionicons name="time-outline" size={28} color="#737373" />
+            <Text className="text-center text-muted-foreground">
+              Ищем водителя…
+            </Text>
 
             {cancelOrder.isError && (
               <Text className="text-center text-destructive">
@@ -96,8 +110,7 @@ export default function ClientHomeScreen() {
             <Pressable
               onPress={handleCancel}
               disabled={cancelOrder.isPending}
-              style={{ marginBottom: 12 + insets.bottom }}
-              className="items-center rounded-2xl border-[1.5px] border-destructive py-3"
+              className="mt-4 items-center rounded-2xl border-[1.5px] border-destructive px-6 py-3"
             >
               <Text className="font-semibold text-destructive">
                 {cancelOrder.isPending ? "Отменяем…" : "Отменить заказ"}

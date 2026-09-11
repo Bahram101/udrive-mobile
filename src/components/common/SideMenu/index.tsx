@@ -21,6 +21,7 @@ import { Text } from "@/components/ui/text";
 import { useAuth } from "@/providers/AuthProvider";
 
 import { useLogout } from "@/features/auth/hooks/useLogout";
+import { useSwitchRole } from "@/features/auth/hooks/useSwitchRole";
 import { useRouter } from "expo-router";
 import { MENU_ITEMS } from "./menuItems";
 
@@ -44,6 +45,7 @@ export default function SideMenu({ visible, onClose }: SideMenuProps) {
   const { user } = useAuth();
   const router = useRouter();
   const logout = useLogout();
+  const switchRole = useSwitchRole();
 
   const [mounted, setMounted] = useState(false);
   const translateX = useSharedValue(-PANEL_WIDTH);
@@ -75,6 +77,17 @@ export default function SideMenu({ visible, onClose }: SideMenuProps) {
   function handleLogout() {
     logout.mutate(undefined, {
       onSuccess: () => router.replace("/(auth)/phone"),
+    });
+  }
+
+  function handleSwitchRole() {
+    switchRole.mutate(undefined, {
+      onSuccess: (nextUser) => {
+        onClose();
+        router.replace(
+          nextUser.role === "DRIVER" ? "/(driver)/home" : "/(client)/home",
+        );
+      },
     });
   }
 
@@ -151,8 +164,20 @@ export default function SideMenu({ visible, onClose }: SideMenuProps) {
             </Pressable>
           </ScrollView>
 
-          <View className="gap-4 border-t border-border pt-4">
-            <AppButton variant="outline">{roleSwitchLabel}</AppButton>
+          <View className="gap-2 border-t border-border pt-4">
+            {switchRole.isError && (
+              <Text className="text-center text-xs text-destructive">
+                {switchRole.error.message}
+              </Text>
+            )}
+
+            <AppButton
+              variant="outline"
+              isLoading={switchRole.isPending}
+              onPress={handleSwitchRole}
+            >
+              {roleSwitchLabel}
+            </AppButton>
           </View>
         </Animated.View>
 

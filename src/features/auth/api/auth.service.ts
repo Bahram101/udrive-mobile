@@ -4,6 +4,7 @@ import type {
   MeResponse,
   SendOtpPayload,
   SendOtpResponse,
+  SwitchRoleResponse,
   VerifyOtpPayload,
   VerifyOtpResponse,
 } from "../auth.types";
@@ -27,6 +28,13 @@ export const authService = {
 
   async getMe(): Promise<MeResponse> {
     const { data } = await apiClient.get<MeResponse>("/auth/me");
+    return data;
+  },
+
+  async switchRole(): Promise<SwitchRoleResponse> {
+    const { data } = await apiClient.patch<SwitchRoleResponse>(
+      "/auth/switch-role",
+    );
     return data;
   },
 };

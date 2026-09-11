@@ -32,7 +32,12 @@ export function ClientOrderMap({ order }: ClientOrderMapProps) {
       : null;
 
   useEffect(() => {
-    if (hasFitted.current || !mapRef.current || !driverPosition || !clientPosition)
+    if (
+      hasFitted.current ||
+      !mapRef.current ||
+      !driverPosition ||
+      !clientPosition
+    )
       return;
 
     hasFitted.current = true;
@@ -51,10 +56,10 @@ export function ClientOrderMap({ order }: ClientOrderMapProps) {
   if (!clientPosition || !order.driverId) return null;
 
   return (
-    <View className="h-[70%] overflow-hidden rounded-2xl border border-border">
+    <View className="flex-1">
       <MapView
         ref={mapRef}
-        style={StyleSheet.absoluteFillObject}
+        style={StyleSheet.absoluteFill}
         provider={
           Platform.OS === "android" ? PROVIDER_GOOGLE : PROVIDER_DEFAULT
         }

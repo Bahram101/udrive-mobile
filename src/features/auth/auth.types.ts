@@ -40,3 +40,7 @@ export type VerifyOtpResponse = AuthTokens & {
 export type MeResponse = {
   user: AuthUser;
 };
+
+export type SwitchRoleResponse = AuthTokens & {
+  user: AuthUser;
+};

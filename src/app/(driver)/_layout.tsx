@@ -1,12 +1,14 @@
 import { Ionicons } from '@expo/vector-icons';
 import { Tabs } from 'expo-router';
 
+import { COLORS } from '@/constants/theme';
+
 export default function DriverLayout() {
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: '#4d7c0f',
+        tabBarActiveTintColor: COLORS.brand[700],
         tabBarInactiveTintColor: '#a3a3a3',
       }}
     >

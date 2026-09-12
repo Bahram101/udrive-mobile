@@ -21,14 +21,14 @@ export function OnlineToggle() {
         disabled={updateStatus.isPending || driverStatus.isLoading}
         className={
           isOnline
-            ? "items-center rounded-full border-2 border-lime-400 bg-lime-400 px-6 py-1"
+            ? "items-center rounded-full border-2 border-brand-400 bg-brand-400 px-6 py-1"
             : "items-center rounded-full border-2 border-destructive px-6 py-1"
         }
       >
         <Text
           className={
             isOnline
-              ? "font-semibold text-lime-950"
+              ? "font-semibold text-brand-950"
               : "font-semibold text-destructive"
           }
         >

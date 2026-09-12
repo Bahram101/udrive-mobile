@@ -2,6 +2,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { View } from "react-native";
 
 import { Text } from "@/components/ui/text";
+import { COLORS } from "@/constants/theme";
 
 import type { Order, OrderStatus } from "../orders.types";
 
@@ -22,8 +23,8 @@ export function OrderCard({ order }: OrderCardProps) {
   return (
     <View className="gap-3 rounded-2xl border border-border bg-muted p-4">
       <View className="flex-row items-center justify-between">
-        <View className="self-start rounded-full bg-lime-100 px-2.5 py-1">
-          <Text className="text-xs font-semibold text-lime-800">
+        <View className="self-start rounded-full bg-brand-100 px-2.5 py-1">
+          <Text className="text-xs font-semibold text-brand-800">
             {STATUS_LABELS[order.status]}
           </Text>
         </View>
@@ -40,7 +41,7 @@ export function OrderCard({ order }: OrderCardProps) {
           <Ionicons
             name="location"
             size={16}
-            color="#3f6212"
+            color={COLORS.brand[800]}
             style={{ marginTop: 2 }}
           />
           <Text className="flex-1 text-sm font-semibold">

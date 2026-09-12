@@ -23,13 +23,13 @@ export function OrderNotice({
         "mt-2 gap-2 rounded-2xl border p-4",
         tone === "destructive"
           ? "border-destructive bg-destructive/5"
-          : "border-lime-400 bg-lime-50",
+          : "border-brand-400 bg-brand-50",
       )}
     >
       <Text
         className={cn(
           "font-semibold",
-          tone === "destructive" ? "text-destructive" : "text-lime-950",
+          tone === "destructive" ? "text-destructive" : "text-brand-950",
         )}
       >
         {title}

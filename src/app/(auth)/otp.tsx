@@ -85,7 +85,7 @@ export default function OtpScreen() {
           {/* <Text className="text-right">
             {"Не пришёл код? "}
             <Text
-              className="text-lime-700 underline"
+              className="text-brand-700 underline"
               onPress={() => resendOtp.mutate({ phone })}
             >
               Отправить ещё раз

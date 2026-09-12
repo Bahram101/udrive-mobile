@@ -7,6 +7,7 @@ import MapView, {
   PROVIDER_GOOGLE,
 } from "react-native-maps";
 
+import { COLORS } from "@/constants/theme";
 import { DriverService } from "@/features/driver/api/driver.service";
 
 import type { Order } from "../orders.types";
@@ -116,7 +117,7 @@ export function OrderMap({ order, role }: OrderMapProps) {
             coordinate={clientPosition}
             title="Клиент"
             description={order.fromAddress}
-            pinColor="#3f6212"
+            pinColor={COLORS.brand[800]}
           />
         ) : (
           driverPosition && (

@@ -2,6 +2,7 @@
 @import "tailwindcss/preflight.css" layer(base);
 @import "tailwindcss/utilities.css";
 @import "nativewind/theme";
+@config "./tailwind.config.js";
 
 /* ─── Theme: design tokens (light / dark) ─────────────────────────
    1. :root              — light defaults (all platforms)

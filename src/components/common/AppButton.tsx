@@ -23,7 +23,7 @@ const AppButton = ({
       className={cn(
         "min-h-14 rounded-2xl will-change-variable",
         variant === "default" &&
-          "bg-lime-400 data-[hover=true]:bg-lime-400/90 data-[active=true]:bg-lime-400/90",
+          "bg-brand-400 data-[hover=true]:bg-brand-400/90 data-[active=true]:bg-brand-400/90",
         className,
       )}
       {...props}
@@ -32,8 +32,8 @@ const AppButton = ({
       <ButtonText
         className={cn(
           "text-base font-medium",
-          variant === "default" && "text-lime-950",
-          variant === "link" && "text-lime-700",
+          variant === "default" && "text-brand-950",
+          variant === "link" && "text-brand-700",
         )}
       >
         {children}

@@ -58,7 +58,7 @@ export function CreateOrderForm({ onSuccess }: CreateOrderFormProps) {
       )}
 
       {createOrder.isSuccess && (
-        <Text className="text-lime-700">{"Заказ отправлен"}</Text>
+        <Text className="text-brand-700">{"Заказ отправлен"}</Text>
       )}
 
       <AppButton

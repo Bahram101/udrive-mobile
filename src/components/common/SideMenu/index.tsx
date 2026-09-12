@@ -112,8 +112,8 @@ export default function SideMenu({ visible, onClose }: SideMenuProps) {
                   className="h-12 w-12 rounded-full"
                 />
               ) : (
-                <View className="h-12 w-12 items-center justify-center rounded-full bg-lime-100">
-                  <Text className="text-lg font-bold text-lime-800">
+                <View className="h-12 w-12 items-center justify-center rounded-full bg-brand-100">
+                  <Text className="text-lg font-bold text-brand-800">
                     {user?.name?.[0]?.toUpperCase() ?? "?"}
                   </Text>
                 </View>

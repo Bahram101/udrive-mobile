@@ -9,8 +9,6 @@ type Props = {
   children: ReactNode;
   topBarCenter?: ReactNode;
   topBarRight?: ReactNode;
-  // Floats the header over fullscreen content (e.g. a map) instead of
-  // insetting the content below it.
   floatingHeader?: boolean;
 };
 
@@ -28,7 +26,7 @@ const ScreenLayout = ({
       className={
         floatingHeader
           ? "flex-row items-center justify-between border-b border-border bg-background px-4 pb-3"
-          : "-mx-4 mb-3 flex-row items-center justify-between border-b border-border px-4 pb-3"
+          : "flex-row items-center justify-between border-b border-border -mx-4 mb-3 px-4 pb-1 pt-2"
       }
       style={floatingHeader ? { paddingTop: insets.top + 8 } : undefined}
     >

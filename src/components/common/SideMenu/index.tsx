@@ -5,6 +5,7 @@ import {
   Dimensions,
   Image,
   Modal,
+  Platform,
   Pressable,
   ScrollView,
   View,
@@ -172,6 +173,7 @@ export default function SideMenu({ visible, onClose }: SideMenuProps) {
             )}
 
             <AppButton
+              className={Platform.OS === "android" ? "mb-10" : ""}
               variant="outline"
               isLoading={switchRole.isPending}
               onPress={handleSwitchRole}

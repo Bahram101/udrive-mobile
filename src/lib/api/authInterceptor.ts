@@ -32,7 +32,8 @@ async function refreshAccessToken(): Promise<string> {
 export function attachAuthInterceptor(apiClient: AxiosInstance) {
   apiClient.interceptors.response.use(
     (response) => {
-      console.log("REQUEST");
+      // console.log("REQUEST");
+      // console.log("RES", JSON.stringify(response, null, 2));
       return response;
     },
     async (error: unknown) => {

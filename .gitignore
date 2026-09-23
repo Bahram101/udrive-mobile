@@ -43,3 +43,6 @@ app-example
 # generated native folders
 /ios
 /android
+
+# firebase credentials (provided via EAS file env var GOOGLE_SERVICES_JSON)
+google-services.json

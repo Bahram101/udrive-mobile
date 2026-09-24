@@ -10,7 +10,10 @@ module.exports = {
     // newArchEnabled: true,
     ios: {
       supportsTablet: true,
-      bundleIdentifier: "com.udrive.mobile",
+      bundleIdentifier: "com.bahram101.udrive",
+      infoPlist: {
+        ITSAppUsesNonExemptEncryption: false,
+      },
     },
     android: {
       package: "com.udrive.mobile",
@@ -78,6 +81,6 @@ module.exports = {
         projectId: "6280ab0f-7914-45ae-ad29-4afbc7ca9048",
       },
     },
-    owner: "bahram101",
+    owner: "udrive-team",
   },
 };

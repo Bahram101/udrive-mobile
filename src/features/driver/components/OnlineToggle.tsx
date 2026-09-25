@@ -58,7 +58,11 @@ export function OnlineToggle() {
                 : "font-semibold text-white"
             }
           >
-            {updateStatus.isPending ? "…" : isOnline ? "На линии" : "Не в сети"}
+            {updateStatus.isPending
+              ? "Загрузка..."
+              : isOnline
+                ? "На линии"
+                : "Не в сети"}
           </Text>
         </Animated.View>
       </Pressable>

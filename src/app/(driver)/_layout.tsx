@@ -1,8 +1,8 @@
-import { Ionicons } from '@expo/vector-icons';
-import { Tabs } from 'expo-router';
+import { Ionicons } from "@expo/vector-icons";
+import { Tabs } from "expo-router";
 
-import { COLORS } from '@/constants/theme';
-import { useRegisterPushToken } from '@/features/notifications/hooks/useRegisterPushToken';
+import { COLORS } from "@/constants/theme";
+import { useRegisterPushToken } from "@/features/notifications/hooks/useRegisterPushToken";
 
 export default function DriverLayout() {
   useRegisterPushToken();
@@ -12,13 +12,13 @@ export default function DriverLayout() {
       screenOptions={{
         headerShown: false,
         tabBarActiveTintColor: COLORS.brand[700],
-        tabBarInactiveTintColor: '#a3a3a3',
+        tabBarInactiveTintColor: "#a3a3a3",
       }}
     >
       <Tabs.Screen
         name="home"
         options={{
-          title: 'Лента заказов',
+          title: "Лента заказов",
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="list-outline" size={size} color={color} />
           ),
@@ -27,7 +27,7 @@ export default function DriverLayout() {
       <Tabs.Screen
         name="statistics"
         options={{
-          title: 'Статистика',
+          title: "Статистика",
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="grid-outline" size={size} color={color} />
           ),
@@ -36,7 +36,7 @@ export default function DriverLayout() {
       <Tabs.Screen
         name="wallet"
         options={{
-          title: 'Кошелёк',
+          title: "Кошелёк",
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="wallet-outline" size={size} color={color} />
           ),

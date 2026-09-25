@@ -69,7 +69,12 @@ module.exports = {
       "expo-image",
       "expo-status-bar",
       "expo-web-browser",
-      "expo-notifications",
+      [
+        "expo-notifications",
+        {
+          sounds: ["./assets/sounds/alarm.wav"],
+        },
+      ],
     ],
     experiments: {
       typedRoutes: true,

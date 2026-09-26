@@ -32,7 +32,7 @@ export function useRegisterPushToken() {
 
       async function register() {
         if (Platform.OS === "android") {
-          await Notifications.setNotificationChannelAsync("orders", {
+          await Notifications.setNotificationChannelAsync("orders-v2", {
             name: "Заказы",
             importance: Notifications.AndroidImportance.MAX,
             sound: "alarm.wav",
@@ -64,6 +64,8 @@ export function useRegisterPushToken() {
       }
 
       register();
+
+      Notifications.setBadgeCountAsync(0).catch(() => {});
 
       subscription = Notifications.addNotificationResponseReceivedListener(
         () => {

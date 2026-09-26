@@ -36,6 +36,13 @@ export function OrderCard({ order }: OrderCardProps) {
         )}
       </View>
 
+      {order.driver?.name && (
+        <View className="flex-row items-center gap-2">
+          <Ionicons name="person" size={16} color={COLORS.brand[800]} />
+          <Text className="text-sm font-semibold">{order.driver.name}</Text>
+        </View>
+      )}
+
       <View className="gap-2">
         <View className="flex-row items-start gap-2">
           <Ionicons

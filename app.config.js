@@ -7,6 +7,10 @@ module.exports = {
     icon: "./assets/images/icon.png",
     scheme: "udrive-mobile",
     userInterfaceStyle: "automatic",
+    // react-native-maps has no web support, and Expo Router's web SSR
+    // crashes trying to render screens that import it — the app is
+    // mobile-only, so web is excluded rather than worked around.
+    platforms: ["ios", "android"],
     // newArchEnabled: true,
     ios: {
       supportsTablet: true,

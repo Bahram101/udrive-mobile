@@ -19,8 +19,15 @@ export default function PhoneScreen() {
     sendOtp.mutate(
       { phone },
       {
-        onSuccess: () => {
-          router.push({ pathname: "/(auth)/otp", params: { phone } });
+        onSuccess: (response) => {
+          router.push({
+            pathname: "/(auth)/otp",
+            params: {
+              phone,
+              needsTelegramLink: String(response.needsTelegramLink),
+              telegramBotUsername: response.telegramBotUsername ?? "",
+            },
+          });
         },
       },
     );

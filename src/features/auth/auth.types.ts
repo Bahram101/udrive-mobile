@@ -24,6 +24,8 @@ export type SendOtpPayload = {
 export type SendOtpResponse = {
   message: string;
   code: string;
+  needsTelegramLink: boolean;
+  telegramBotUsername?: string;
 };
 
 export type VerifyOtpPayload = {

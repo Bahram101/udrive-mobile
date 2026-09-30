@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useState } from "react";
-import { ScrollView } from "react-native";
+import { Linking, Pressable, ScrollView, View } from "react-native";
 
 import AppButton from "@/components/common/AppButton";
 import AppInput from "@/components/common/AppInput";
@@ -11,9 +11,16 @@ import { VStack } from "@/components/ui/vstack";
 import { useSendOtp, useVerifyOtp } from "@/features/auth/hooks";
 
 export default function OtpScreen() {
-  const { phone } = useLocalSearchParams<{ phone: string }>();
+  const { phone, needsTelegramLink, telegramBotUsername } =
+    useLocalSearchParams<{
+      phone: string;
+      needsTelegramLink?: string;
+      telegramBotUsername?: string;
+    }>();
   const router = useRouter();
   const [code, setCode] = useState("");
+
+  const showTelegramLink = needsTelegramLink === "true" && !!telegramBotUsername;
 
   const verifyOtp = useVerifyOtp();
   const resendOtp = useSendOtp();
@@ -61,6 +68,28 @@ export default function OtpScreen() {
         </VStack>
 
         <VStack className="gap-4">
+          {showTelegramLink && (
+            <View className="gap-2 rounded-2xl border border-border bg-muted p-4">
+              <Text className="font-semibold">
+                {`Откройте @${telegramBotUsername} в Telegram`}
+              </Text>
+              <Text className="text-sm text-muted-foreground">
+                Поделитесь номером телефона в боте — код придёт туда, введите
+                его здесь
+              </Text>
+              <Pressable
+                onPress={() =>
+                  Linking.openURL(`https://t.me/${telegramBotUsername}`)
+                }
+                className="items-center rounded-xl bg-lime-400 py-2.5"
+              >
+                <Text className="font-semibold text-lime-950">
+                  Открыть Telegram
+                </Text>
+              </Pressable>
+            </View>
+          )}
+
           <AppInput
             placeholder="000000"
             value={code}

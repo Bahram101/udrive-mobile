@@ -46,3 +46,6 @@ app-example
 
 # firebase credentials (provided via EAS file env var GOOGLE_SERVICES_JSON)
 google-services.json
+
+# local env (secrets)
+.env

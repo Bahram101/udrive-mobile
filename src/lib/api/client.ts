@@ -6,7 +6,7 @@ import { tokenStorage } from "@/lib/storage/secureStore";
 export const apiClient = axios.create({
   baseURL: process.env.EXPO_PUBLIC_API_URL,
   timeout: 15000,
-  headers: { "ngrok-skip-browser-warning": "true" },
+  headers: process.env.EXPO_PUBLIC_API_URL?.includes("ngrok") ? { "ngrok-skip-browser-warning": "true" } : undefined,
 });
 
 apiClient.interceptors.request.use(async (config) => {

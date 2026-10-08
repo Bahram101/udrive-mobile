@@ -60,12 +60,12 @@ export function useRegisterPushToken() {
 
         if (!isMounted) return;
 
-        NotificationsService.registerPushToken(pushToken).catch(() => {});
+        NotificationsService.registerPushToken(pushToken).catch((err) => console.warn("Failed to register push token:", err));
       }
 
       register();
 
-      Notifications.setBadgeCountAsync(0).catch(() => {});
+      Notifications.setBadgeCountAsync(0).catch((err) => console.warn("Failed to set badge count:", err));
 
       subscription = Notifications.addNotificationResponseReceivedListener(
         () => {

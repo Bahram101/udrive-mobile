@@ -10,7 +10,6 @@ export function useGetMe() {
     mutationFn: async () => {
       try {
         const user = await refreshUser();
-        console.log("useGetMe: user", user);
         return user;
       } catch (error) {
         if (axios.isAxiosError(error)) {

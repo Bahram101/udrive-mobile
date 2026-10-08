@@ -1,3 +1,8 @@
+const googleMapsApiKey = process.env.GOOGLE_MAPS_API_KEY;
+if (!googleMapsApiKey) {
+  console.warn("WARNING: GOOGLE_MAPS_API_KEY is not set in the environment. Google Maps will not work on Android.");
+}
+
 module.exports = {
   expo: {
     name: "udrive-mobile",
@@ -36,7 +41,7 @@ module.exports = {
       predictiveBackGestureEnabled: false,
       config: {
         googleMaps: {
-          apiKey: "AIzaSyBN5xBbrz168tz2hiSCYwPNtoLd4mnZ0Gw",
+          apiKey: googleMapsApiKey || "",
         },
       },
       permissions: [

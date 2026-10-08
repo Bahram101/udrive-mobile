@@ -8,7 +8,6 @@ import MapView, {
 } from "react-native-maps";
 
 import { COLORS } from "@/constants/theme";
-import { DriverService } from "@/features/driver/api/driver.service";
 
 import type { Order } from "../orders.types";
 
@@ -32,13 +31,14 @@ export function OrderMap({ order, role }: OrderMapProps) {
   useEffect(() => {
     if (role !== "driver") return;
 
+    let canceled = false;
     let subscription: Location.LocationSubscription | null = null;
 
     async function watchOwnPosition() {
       const { status } = await Location.getForegroundPermissionsAsync();
-      if (status !== Location.PermissionStatus.GRANTED) return;
+      if (status !== Location.PermissionStatus.GRANTED || canceled) return;
 
-      subscription = await Location.watchPositionAsync(
+      const sub = await Location.watchPositionAsync(
         {
           accuracy: Location.Accuracy.Balanced,
           timeInterval: 4000,
@@ -47,18 +47,22 @@ export function OrderMap({ order, role }: OrderMapProps) {
         (position) => {
           const { latitude, longitude } = position.coords;
           setOwnLivePosition({ latitude, longitude });
-          DriverService.updateStatus({
-            isOnline: true,
-            lat: latitude,
-            lng: longitude,
-          }).catch(() => {});
         },
       );
+      
+      if (canceled) {
+        sub.remove();
+      } else {
+        subscription = sub;
+      }
     }
 
     watchOwnPosition();
 
-    return () => subscription?.remove();
+    return () => {
+      canceled = true;
+      subscription?.remove();
+    };
   }, [role]);
 
   const clientPosition: Coordinates | null =

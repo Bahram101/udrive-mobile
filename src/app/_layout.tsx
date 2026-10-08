@@ -7,6 +7,7 @@ import { AppProviders } from "@/providers";
 
 import { StatusBar } from "expo-status-bar";
 import "../../global.css";
+import "@/features/driver/services/locationTask";
 
 export default function RootLayout() {
   return (

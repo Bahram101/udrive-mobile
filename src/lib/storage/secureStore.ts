@@ -1,7 +1,7 @@
-import * as SecureStore from 'expo-secure-store';
+import * as SecureStore from "expo-secure-store";
 
-const ACCESS_TOKEN_KEY = 'access_token';
-const REFRESH_TOKEN_KEY = 'refresh_token';
+const ACCESS_TOKEN_KEY = "access_token";
+const REFRESH_TOKEN_KEY = "refresh_token";
 
 export const tokenStorage = {
   async getAccessToken() {
@@ -11,9 +11,12 @@ export const tokenStorage = {
     return SecureStore.getItemAsync(REFRESH_TOKEN_KEY);
   },
   async setTokens(accessToken: string, refreshToken?: string) {
-    await SecureStore.setItemAsync(ACCESS_TOKEN_KEY, accessToken);
+    const options: SecureStore.SecureStoreOptions = {
+      keychainAccessible: SecureStore.AFTER_FIRST_UNLOCK,
+    };
+    await SecureStore.setItemAsync(ACCESS_TOKEN_KEY, accessToken, options);
     if (refreshToken) {
-      await SecureStore.setItemAsync(REFRESH_TOKEN_KEY, refreshToken);
+      await SecureStore.setItemAsync(REFRESH_TOKEN_KEY, refreshToken, options);
     }
   },
   async clearTokens() {

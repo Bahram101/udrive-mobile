@@ -23,4 +23,9 @@ export const DriverService = {
     );
     return data;
   },
+
+  async updateLocation(payload: { lat: number; lng: number }) {
+    const { data } = await apiClient.patch("/driver/location", payload);
+    return data;
+  },
 };

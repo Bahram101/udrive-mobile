@@ -17,6 +17,7 @@ module.exports = {
       bundleIdentifier: "com.bahram101.udrive",
       infoPlist: {
         ITSAppUsesNonExemptEncryption: false,
+        UIBackgroundModes: ["location"],
       },
     },
     android: {
@@ -41,6 +42,9 @@ module.exports = {
       permissions: [
         "android.permission.ACCESS_COARSE_LOCATION",
         "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.ACCESS_BACKGROUND_LOCATION",
+        "android.permission.FOREGROUND_SERVICE",
+        "android.permission.FOREGROUND_SERVICE_LOCATION",
       ],
     },
     web: {
@@ -66,7 +70,13 @@ module.exports = {
         "expo-location",
         {
           locationWhenInUsePermission:
-            "uDrive использует ваше местоположение, чтобы водитель мог вас найти.",
+            "uDrive использует ваше местоположение, чтобы водитель мог вас найти или чтобы передавать ваше местоположение пассажирам.",
+          locationAlwaysAndWhenInUsePermission:
+            "uDrive использует ваше местоположение в фоновом режиме, чтобы пассажиры всегда видели вас на карте.",
+          locationAlwaysPermission:
+            "uDrive использует ваше местоположение в фоновом режиме, чтобы пассажиры всегда видели вас на карте.",
+          isAndroidBackgroundLocationEnabled: true,
+          isIosBackgroundLocationEnabled: true,
         },
       ],
       "expo-font",

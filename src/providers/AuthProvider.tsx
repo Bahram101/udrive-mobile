@@ -12,6 +12,7 @@ import type { AuthUser, VerifyOtpPayload } from "@/features/auth/auth.types";
 import { setUnauthorizedHandler } from "@/lib/api/authInterceptor";
 import { userStorage } from "@/lib/storage/asyncStorage";
 import { tokenStorage } from "@/lib/storage/secureStore";
+import { stopLocationTracking } from "@/features/driver/services/locationTask";
 
 type AuthContextValue = {
   user: AuthUser | null;
@@ -64,7 +65,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   async function signOut() {
-    await Promise.all([tokenStorage.clearTokens(), userStorage.clearUser()]);
+    await Promise.all([
+      tokenStorage.clearTokens(),
+      userStorage.clearUser(),
+      stopLocationTracking(),
+    ]);
     setUser(null);
   }
 

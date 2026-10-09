@@ -38,22 +38,26 @@ export function OrderMap({ order, role }: OrderMapProps) {
       const { status } = await Location.getForegroundPermissionsAsync();
       if (status !== Location.PermissionStatus.GRANTED || canceled) return;
 
-      const sub = await Location.watchPositionAsync(
-        {
-          accuracy: Location.Accuracy.Balanced,
-          timeInterval: 4000,
-          distanceInterval: 20,
-        },
-        (position) => {
-          const { latitude, longitude } = position.coords;
-          setOwnLivePosition({ latitude, longitude });
-        },
-      );
-      
-      if (canceled) {
-        sub.remove();
-      } else {
-        subscription = sub;
+      try {
+        const sub = await Location.watchPositionAsync(
+          {
+            accuracy: Location.Accuracy.Balanced,
+            timeInterval: 4000,
+            distanceInterval: 20,
+          },
+          (position) => {
+            const { latitude, longitude } = position.coords;
+            setOwnLivePosition({ latitude, longitude });
+          },
+        );
+        
+        if (canceled) {
+          sub.remove();
+        } else {
+          subscription = sub;
+        }
+      } catch (err) {
+        console.warn("Failed to watch own position:", err);
       }
     }
 

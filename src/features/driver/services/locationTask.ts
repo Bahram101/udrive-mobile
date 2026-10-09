@@ -55,28 +55,39 @@ export async function stopLocationTracking() {
 let fgSubscription: Location.LocationSubscription | null = null;
 let fgCanceled = false;
 
-export async function startForegroundTracking() {
+export async function startForegroundTracking(): Promise<boolean> {
   fgCanceled = false;
-  if (fgSubscription) return;
+  if (fgSubscription) return true;
 
-  const sub = await Location.watchPositionAsync(
-    {
-      accuracy: Location.Accuracy.Balanced,
-      timeInterval: 10000,
-      distanceInterval: 20,
-    },
-    (position) => {
-      DriverService.updateLocation({
-        lat: position.coords.latitude,
-        lng: position.coords.longitude,
-      }).catch(console.error);
-    },
-  );
+  const fg = await Location.getForegroundPermissionsAsync();
+  if (fg.status !== Location.PermissionStatus.GRANTED) {
+    return false;
+  }
 
-  if (fgCanceled) {
-    sub.remove();
-  } else {
-    fgSubscription = sub;
+  try {
+    const sub = await Location.watchPositionAsync(
+      {
+        accuracy: Location.Accuracy.Balanced,
+        timeInterval: 10000,
+        distanceInterval: 20,
+      },
+      (position) => {
+        DriverService.updateLocation({
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+        }).catch(console.error);
+      },
+    );
+
+    if (fgCanceled) {
+      sub.remove();
+    } else {
+      fgSubscription = sub;
+    }
+    return true;
+  } catch (err) {
+    console.warn("Failed to start foreground tracking:", err);
+    return false;
   }
 }
 

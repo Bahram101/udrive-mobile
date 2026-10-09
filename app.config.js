@@ -91,7 +91,7 @@ module.exports = {
       [
         "expo-notifications",
         {
-          sounds: ["./assets/sounds/alarm.wav"],
+          sounds: ["./assets/sounds/alarm.wav", "./assets/sounds/arrived.wav"],
         },
       ],
     ],

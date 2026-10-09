@@ -8,7 +8,7 @@ import { NotificationsService } from "../api/notifications.service";
 const isUnsupportedInExpoGo =
   Constants.appOwnership === "expo" && Platform.OS === "android";
 
-export function useRegisterPushToken() {
+export function useRegisterPushToken(role: "driver" | "client" = "driver") {
   const router = useRouter();
 
   useEffect(() => {
@@ -32,12 +32,21 @@ export function useRegisterPushToken() {
 
       async function register() {
         if (Platform.OS === "android") {
-          await Notifications.setNotificationChannelAsync("orders-v2", {
-            name: "Заказы",
-            importance: Notifications.AndroidImportance.MAX,
-            sound: "alarm.wav",
-            vibrationPattern: [0, 250, 250, 250],
-          });
+          if (role === "driver") {
+            await Notifications.setNotificationChannelAsync("orders-v2", {
+              name: "Заказы",
+              importance: Notifications.AndroidImportance.MAX,
+              sound: "alarm.wav",
+              vibrationPattern: [0, 250, 250, 250],
+            });
+          } else {
+            await Notifications.deleteNotificationChannelAsync("order-status").catch(() => {});
+            await Notifications.setNotificationChannelAsync("order-status-v2", {
+              name: "Статус заказа",
+              importance: Notifications.AndroidImportance.HIGH,
+              sound: "arrived.wav",
+            });
+          }
         }
 
         const { status: existingStatus } =
@@ -60,7 +69,7 @@ export function useRegisterPushToken() {
 
         if (!isMounted) return;
 
-        NotificationsService.registerPushToken(pushToken).catch((err) => console.warn("Failed to register push token:", err));
+        NotificationsService.registerPushToken(pushToken, role).catch((err) => console.warn("Failed to register push token:", err));
       }
 
       register();
@@ -69,7 +78,11 @@ export function useRegisterPushToken() {
 
       subscription = Notifications.addNotificationResponseReceivedListener(
         () => {
-          router.push("/(driver)/home");
+          if (role === "client") {
+            router.push("/(client)/home");
+          } else {
+            router.push("/(driver)/home");
+          }
         },
       );
     } catch {
@@ -80,5 +93,5 @@ export function useRegisterPushToken() {
       isMounted = false;
       subscription?.remove();
     };
-  }, [router]);
+  }, [router, role]);
 }

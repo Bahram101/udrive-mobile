@@ -3,11 +3,12 @@ import { useState } from "react";
 import { ScrollView } from "react-native";
 
 import AppButton from "@/components/common/AppButton";
-import AppInput from "@/components/common/AppInput";
+import PhoneInput from "@/components/common/PhoneInput";
 import { Heading } from "@/components/ui/heading";
 import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
 import { useSendOtp } from "@/features/auth/hooks";
+import { isValidKzPhone, toInternationalPhone } from "@/lib/phone";
 
 export default function PhoneScreen() {
   const router = useRouter();
@@ -16,14 +17,15 @@ export default function PhoneScreen() {
   const sendOtp = useSendOtp();
 
   function handleSubmit() {
+    const internationalPhone = toInternationalPhone(phone);
     sendOtp.mutate(
-      { phone },
+      { phone: internationalPhone },
       {
         onSuccess: (response) => {
           router.push({
             pathname: "/(auth)/otp",
             params: {
-              phone,
+              phone: internationalPhone,
               needsTelegramLink: String(response.needsTelegramLink),
               telegramBotUsername: response.telegramBotUsername ?? "",
             },
@@ -32,6 +34,8 @@ export default function PhoneScreen() {
       },
     );
   }
+
+  const isFormValid = isValidKzPhone(phone);
 
   return (
     <ScrollView
@@ -51,12 +55,7 @@ export default function PhoneScreen() {
         </VStack>
 
         <VStack className="gap-4">
-          <AppInput
-            placeholder="+7XXXXXXXXXX"
-            value={phone}
-            onChangeText={setPhone}
-            keyboardType="phone-pad"
-          />
+          <PhoneInput value={phone} onChangeText={setPhone} />
 
           {sendOtp.isError && (
             <Text className="text-destructive">
@@ -66,7 +65,7 @@ export default function PhoneScreen() {
 
           <AppButton
             onPress={handleSubmit}
-            isDisabled={sendOtp.isPending || !phone}
+            isDisabled={sendOtp.isPending || !isFormValid}
             isLoading={sendOtp.isPending}
           >
             Получить код

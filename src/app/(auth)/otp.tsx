@@ -10,6 +10,8 @@ import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
 import { useSendOtp, useVerifyOtp } from "@/features/auth/hooks";
 
+import { formatPhoneForDisplay } from "@/lib/phone";
+
 export default function OtpScreen() {
   const { phone, needsTelegramLink, telegramBotUsername } =
     useLocalSearchParams<{
@@ -20,7 +22,8 @@ export default function OtpScreen() {
   const router = useRouter();
   const [code, setCode] = useState("");
 
-  const showTelegramLink = needsTelegramLink === "true" && !!telegramBotUsername;
+  const showTelegramLink =
+    needsTelegramLink === "true" && !!telegramBotUsername;
 
   const verifyOtp = useVerifyOtp();
   const resendOtp = useSendOtp();
@@ -63,7 +66,7 @@ export default function OtpScreen() {
         <VStack className="gap-2">
           <Heading size="2xl">Введите код</Heading>
           <Text className="text-muted-foreground">
-            Мы отправили код подтверждения на {phone}
+            Мы отправили код подтверждения на {formatPhoneForDisplay(phone)}
           </Text>
         </VStack>
 
@@ -110,16 +113,6 @@ export default function OtpScreen() {
           >
             Подтвердить
           </AppButton>
-
-          {/* <Text className="text-right">
-            {"Не пришёл код? "}
-            <Text
-              className="text-brand-700 underline"
-              onPress={() => resendOtp.mutate({ phone })}
-            >
-              Отправить ещё раз
-            </Text>
-          </Text> */}
         </VStack>
       </VStack>
     </ScrollView>

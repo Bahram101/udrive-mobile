@@ -67,7 +67,8 @@ npm run lint
 
 - Conventional Commits на английском: `fix(orders): ...`, `feat(driver): ...`.
 - Коммит/пуш — только по просьбе владельца. Не коммитить `.env`.
-- **Внимание**: `google-services.json` сейчас отслеживается git, хотя `app.config.js` предполагает, что ключи не попадают в git (в EAS берутся из `GOOGLE_SERVICES_JSON`). Решить с владельцем, убрать ли его из репозитория.
+- `google-services.json` не хранится в git (`.gitignore`). Локально — файл в корне проекта (скачать из Firebase Console → Project settings → Android app). В EAS-сборках — файловая переменная `GOOGLE_SERVICES_JSON` (есть в development, preview, production). В `.env` её добавлять не нужно.
+- API-ключи Firebase/Google Maps ограничивать в Google Cloud Console (пакет `com.udrive.mobile` + SHA-1).
 
 ## Общение
 

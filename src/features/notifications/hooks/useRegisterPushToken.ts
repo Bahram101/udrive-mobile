@@ -4,22 +4,18 @@ import { useEffect } from "react";
 import { Platform } from "react-native";
 
 import { NotificationsService } from "../api/notifications.service";
-
-const isUnsupportedInExpoGo =
-  Constants.appOwnership === "expo" && Platform.OS === "android";
+import { loadNotifications } from "../lib/safeNotifications";
 
 export function useRegisterPushToken(role: "driver" | "client" = "driver") {
   const router = useRouter();
 
   useEffect(() => {
-    if (isUnsupportedInExpoGo) return;
-
     let isMounted = true;
     let subscription: { remove: () => void } | undefined;
 
-    try {
-      const Notifications =
-        require("expo-notifications") as typeof import("expo-notifications");
+    async function setup() {
+      const Notifications = await loadNotifications();
+      if (!Notifications || !isMounted) return;
 
       Notifications.setNotificationHandler({
         handleNotification: async () => ({
@@ -30,7 +26,11 @@ export function useRegisterPushToken(role: "driver" | "client" = "driver") {
         }),
       });
 
-      async function register() {
+      async function register(
+        Notifications: NonNullable<
+          Awaited<ReturnType<typeof loadNotifications>>
+        >,
+      ) {
         if (Platform.OS === "android") {
           if (role === "driver") {
             await Notifications.setNotificationChannelAsync("orders-v2", {
@@ -72,7 +72,7 @@ export function useRegisterPushToken(role: "driver" | "client" = "driver") {
         NotificationsService.registerPushToken(pushToken, role).catch((err) => console.warn("Failed to register push token:", err));
       }
 
-      register();
+      register(Notifications);
 
       Notifications.setBadgeCountAsync(0).catch((err) => console.warn("Failed to set badge count:", err));
 
@@ -85,9 +85,9 @@ export function useRegisterPushToken(role: "driver" | "client" = "driver") {
           }
         },
       );
-    } catch {
-      // Notifications unsupported in this runtime (e.g. Expo Go) — ignore.
     }
+
+    setup();
 
     return () => {
       isMounted = false;

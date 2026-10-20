@@ -26,7 +26,7 @@
 
 - `src/app/` — экраны Expo Router по группам: `(auth)` (телефон, OTP), `(onboarding)` (регистрация), `(client)`, `(driver)` (главная, статистика, кошелёк).
 - `src/features/<feature>/` — `api/` (запросы), `hooks/` (React Query), `components/`, `*.types.ts`. Фичи: `auth`, `driver`, `orders`, `notifications`.
-- `src/components/common/` — общие компоненты (`AppButton`, `AppInput`, `PhoneInput`, `ScreenLayout`, `SideMenu`); `src/components/ui/` — gluestack.
+- `src/components/common/` — общие компоненты (`AppButton`, `AppInput`, `PhoneInput`, `ScreenLayout`, `SideMenu`, `BottomSheet` — универсальная модалка снизу экрана, переиспользуй её для любых всплывающих шторок вместо нового `Modal`); `src/components/ui/` — gluestack.
 - `src/lib/` — `api/client.ts` (axios + Bearer-токен), `api/authInterceptor.ts` (refresh при 401), `storage/` (SecureStore для токенов, AsyncStorage для пользователя), `phone.ts`, `query/queryClient.ts`.
 - `src/providers/` — `AuthProvider` (сессия), `AuthGate` (редирект неавторизованных), `QueryProvider`.
 
@@ -52,6 +52,7 @@
 - **Производительность**: без лишних ре-рендеров (`useMemo`/`useCallback` там, где это нужно), списки — через `FlatList`; геолокация — разумная частота, батарея водителя важна.
 - **UX**: состояния загрузки/ошибки/пусто на каждом экране, disabled-кнопки во время запроса, safe area; отсутствие сети не должно «ронять» приложение.
 - **Разрешения** (геолокация, уведомления): запрашивать с объяснением и корректно обрабатывать отказ.
+- **Условная загрузка нативных модулей — через `await import(...)`, не `require(...)`.** `require` требует `eslint-disable` и это признак не современного кода. Пример: `expo-notifications` крашит Expo Go на Android уже на этапе загрузки модуля, поэтому его нельзя импортировать статически — `src/features/notifications/lib/safeNotifications.ts` (`loadNotifications()`) грузит его лениво через `await import("expo-notifications")` и возвращает `null` в неподдерживаемой среде. Это общий хелпер — переиспользуй его, не пиши вторую копию той же проверки в другом файле.
 - Тексты интерфейса — на русском.
 
 ## Проверка перед сдачей
@@ -78,7 +79,9 @@ npm run lint
 ## Работа с agy
 
 - Задачи выполняют агенты agy (скилл `agy`), Claude — оркестратор: бриф, проверка, отчёт.
-- Перед запуском: `agy-ts status` и `agy models`. `gemini-3.1-pro-high` недоступна на аккаунте; для `claude-opus-4-6-thinking` передавать `--effort ""`.
+- **Всегда сначала расходуй квоту Gemini**, и только когда она исчерпана — переходи на Claude/GPT. Не наоборот.
+- Перед запуском: `agy-ts status` и `agy models`. `gemini-3.1-pro-high` в этой установке agy вообще отсутствует (проверено и через Antigravity-аккаунт, и через резервный ключ — в обоих случаях список один и тот же: `gemini-3.8-flash-*`, `claude-sonnet-4-6`, `claude-opus-4-6-thinking`, `gpt-oss-120b-medium`). Лучшая доступная Gemini-модель на деле — `gemini-3.8-flash-high`; для `claude-opus-4-6-thinking` передавать `--effort ""`.
+- Настроен резервный ключ `GEMINI_FALLBACK_TOKEN` (`C:\Users\Bahrom\.config\agy-ts\tokens.env`) — подключается автоматически, когда квота Antigravity исчерпана.
 - Если квота agy закончилась — сообщить время восстановления и спросить владельца.
 
 ## Текущее состояние и задачи

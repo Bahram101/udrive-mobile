@@ -1,17 +1,22 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import * as Location from "expo-location";
 
-import { Alert } from "react-native";
-
 import { withNormalizedError } from "@/lib/api/withNormalizedError";
 
 import { DriverService } from "../api/driver.service";
 import type { UpdateDriverStatusResponse } from "../driver.types";
 import {
+  requestBackgroundWithPriming,
+  showDenialNoticeOnce,
+} from "../services/locationPermissions";
+import {
   startForegroundTracking,
   startLocationTracking,
   stopLocationTracking,
 } from "../services/locationTask";
+
+const BACKGROUND_LOCATION_REQUIRED_MESSAGE =
+  "Разрешите доступ к геолокации «Всегда», чтобы выйти на линию";
 
 export function useUpdateDriverStatus() {
   const queryClient = useQueryClient();
@@ -31,13 +36,11 @@ export function useUpdateDriverStatus() {
         throw new Error("Разрешите доступ к геолокации, чтобы выйти на линию");
       }
 
-      const bg = await Location.requestBackgroundPermissionsAsync();
-      if (bg.status !== Location.PermissionStatus.GRANTED) {
-        Alert.alert(
-          "Фоновый режим отключен",
-          "Ваше местоположение будет передаваться только когда приложение открыто.",
-          [{ text: "Понятно" }],
-        );
+      const bgStatus = await requestBackgroundWithPriming();
+
+      if (bgStatus !== Location.PermissionStatus.GRANTED) {
+        await showDenialNoticeOnce();
+        throw new Error(BACKGROUND_LOCATION_REQUIRED_MESSAGE);
       }
 
       const position = await Location.getCurrentPositionAsync({
@@ -52,14 +55,10 @@ export function useUpdateDriverStatus() {
         }),
       );
 
-      if (bg.status === Location.PermissionStatus.GRANTED) {
-        try {
-          await startLocationTracking();
-        } catch (err) {
-          console.error("Failed to start background tracking:", err);
-          await startForegroundTracking();
-        }
-      } else {
+      try {
+        await startLocationTracking();
+      } catch (err) {
+        console.error("Failed to start background tracking:", err);
         await startForegroundTracking();
       }
 

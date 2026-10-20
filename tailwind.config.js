@@ -16,6 +16,11 @@ module.exports = {
           900: "#581c87",
           950: "#3b0764",
         },
+        // softer than `destructive` — for urgent banners/sheets
+        alert: {
+          600: "#dc2626",
+          700: "#b91c1c",
+        },
       },
     },
   },

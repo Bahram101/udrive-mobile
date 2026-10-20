@@ -29,17 +29,17 @@ export function useDriverStatus() {
     async function checkPermissionsAndTrack() {
       try {
         const bg = await Location.getBackgroundPermissionsAsync();
+
         if (bg.status === Location.PermissionStatus.GRANTED) {
           try {
             await startLocationTracking();
-            return;
           } catch {
-            // fallback to foreground tracking
+            await startForegroundTracking();
           }
+          return;
         }
 
-        const success = await startForegroundTracking();
-        if (!success && !alertShownRef.current) {
+        if (!alertShownRef.current) {
           alertShownRef.current = true;
 
           DriverService.updateStatus({ isOnline: false })
@@ -52,8 +52,8 @@ export function useDriverStatus() {
             .catch(console.error);
 
           Alert.alert(
-            "Нет доступа к геолокации",
-            "Вы сняты с линии. Разрешите доступ к геолокации в настройках, чтобы выйти на линию.",
+            "Вы сняты с линии",
+            "Доступ к геолокации «Всегда» отключен. Разрешите его в настройках, чтобы снова выйти на линию.",
           );
         }
       } catch (err) {

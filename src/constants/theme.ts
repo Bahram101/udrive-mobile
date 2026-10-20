@@ -15,4 +15,8 @@ export const COLORS = {
     900: "#581c87",
     950: "#3b0764",
   },
+  alert: {
+    600: "#dc2626",
+    700: "#b91c1c",
+  },
 } as const;

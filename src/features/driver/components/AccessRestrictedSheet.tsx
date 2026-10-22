@@ -1,4 +1,5 @@
 import { Ionicons } from "@expo/vector-icons";
+import { useRef } from "react";
 import { Pressable, View } from "react-native";
 
 import BottomSheet from "@/components/common/BottomSheet";
@@ -14,33 +15,32 @@ type Props = {
 
 export function AccessRestrictedSheet({ visible, onClose }: Props) {
   const { items } = useDriverAccessChecklist();
+  const pendingFixRef = useRef<(() => void) | null>(null);
+
+  function handleRowPress(fix: () => void) {
+    pendingFixRef.current = fix;
+    onClose();
+  }
+
+  function handleClosed() {
+    pendingFixRef.current?.();
+    pendingFixRef.current = null;
+  }
 
   return (
-    <BottomSheet visible={visible} onClose={onClose}>
+    <BottomSheet visible={visible} onClose={onClose} onClosed={handleClosed}>
       <View className="items-center rounded-t-3xl bg-alert-600 px-4 pb-6 pt-4">
         <Text className="text-center text-xl font-bold text-white">
           Доступ к заказам ограничен
         </Text>
-        <Text className="mt-2 text-center text-sm text-white/80">
-          Устраните проблемы ниже, чтобы получать заказы
-        </Text>
       </View>
 
       <View className="gap-3 px-4 pb-6 pt-5">
-        <Text className="text-xs font-semibold uppercase text-muted-foreground">
-          Доступ к заказам
-        </Text>
-
         {items.map((item) => (
           <Pressable
             key={item.id}
             onPress={
-              item.blocked
-                ? () => {
-                    onClose();
-                    item.fix();
-                  }
-                : undefined
+              item.blocked ? () => handleRowPress(item.fix) : undefined
             }
             disabled={!item.blocked}
             className="flex-row items-center gap-3 rounded-2xl border border-border bg-muted p-4"
@@ -50,9 +50,7 @@ export function AccessRestrictedSheet({ visible, onClose }: Props) {
               size={24}
               color={item.blocked ? COLORS.alert[700] : COLORS.brand[600]}
             />
-            <Text className="flex-1 text-sm text-foreground">
-              {item.label}
-            </Text>
+            <Text className="flex-1 text-sm text-foreground">{item.label}</Text>
             {item.blocked && (
               <Ionicons name="chevron-forward" size={20} color="#737373" />
             )}

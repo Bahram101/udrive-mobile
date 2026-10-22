@@ -26,7 +26,7 @@
 
 - `src/app/` — экраны Expo Router по группам: `(auth)` (телефон, OTP), `(onboarding)` (регистрация), `(client)`, `(driver)` (главная, статистика, кошелёк).
 - `src/features/<feature>/` — `api/` (запросы), `hooks/` (React Query), `components/`, `*.types.ts`. Фичи: `auth`, `driver`, `orders`, `notifications`.
-- `src/components/common/` — общие компоненты (`AppButton`, `AppInput`, `PhoneInput`, `ScreenLayout`, `SideMenu`, `BottomSheet` — универсальная модалка снизу экрана, `Toast` — успех-баннер сверху экрана с автозакрытием; переиспользуй их вместо нового `Modal`/самодельного уведомления); `src/components/ui/` — gluestack.
+- `src/components/common/` — общие компоненты (`AppButton`, `AppInput`, `PhoneInput`, `ScreenLayout`, `SideMenu`, `BottomSheet` — универсальная модалка снизу экрана (есть `onClosed` — срабатывает, когда анимация закрытия реально завершилась; используй его, а не `setTimeout`, для действий типа `Linking.openSettings()`, которые нельзя запускать поверх ещё закрывающегося `Modal`), `Toast` — успех-баннер сверху экрана с автозакрытием; переиспользуй их вместо нового `Modal`/самодельного уведомления); `src/components/ui/` — gluestack.
 - `src/lib/` — `api/client.ts` (axios + Bearer-токен), `api/authInterceptor.ts` (refresh при 401), `storage/` (SecureStore для токенов, AsyncStorage для пользователя), `phone.ts`, `query/queryClient.ts`.
 - `src/providers/` — `AuthProvider` (сессия), `AuthGate` (редирект неавторизованных), `QueryProvider`.
 

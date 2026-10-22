@@ -6,8 +6,6 @@ import * as Location from "expo-location";
 
 import { loadNotifications } from "@/features/notifications/lib/safeNotifications";
 
-import { requestBackgroundWithPriming } from "../services/locationPermissions";
-
 type ChecklistItem = {
   id: string;
   label: string;
@@ -25,21 +23,12 @@ type DriverAccessChecklist = {
   refresh: () => void;
 };
 
-async function getNotificationStatus(): Promise<{
-  granted: boolean;
-  canAskAgain: boolean;
-}> {
+async function isNotificationsGranted(): Promise<boolean> {
   const Notifications = await loadNotifications();
-  if (!Notifications) return { granted: true, canAskAgain: false };
+  if (!Notifications) return true;
 
-  const { status, canAskAgain } = await Notifications.getPermissionsAsync();
-  return { granted: status === "granted", canAskAgain: canAskAgain ?? false };
-}
-
-async function requestNotificationPermission(): Promise<void> {
-  const Notifications = await loadNotifications();
-  if (!Notifications) return;
-  await Notifications.requestPermissionsAsync();
+  const { status } = await Notifications.getPermissionsAsync();
+  return status === "granted";
 }
 
 export function useDriverAccessChecklist(): DriverAccessChecklist {
@@ -50,15 +39,15 @@ export function useDriverAccessChecklist(): DriverAccessChecklist {
   const checkPermissions = useCallback(async () => {
     setIsLoading(true);
 
-    const [bgPerm, notifPerm] = await Promise.all([
+    const [bgPerm, notifGranted] = await Promise.all([
       Location.getBackgroundPermissionsAsync(),
-      getNotificationStatus(),
+      isNotificationsGranted(),
     ]);
 
     setBgLocationBlocked(
       bgPerm.status !== Location.PermissionStatus.GRANTED,
     );
-    setNotifBlocked(!notifPerm.granted);
+    setNotifBlocked(!notifGranted);
     setIsLoading(false);
   }, []);
 
@@ -78,25 +67,13 @@ export function useDriverAccessChecklist(): DriverAccessChecklist {
     return () => subscription.remove();
   }, [checkPermissions]);
 
-  const fixBgLocation = useCallback(async () => {
-    const { canAskAgain } = await Location.getBackgroundPermissionsAsync();
-    if (!canAskAgain) {
-      Linking.openSettings();
-      return;
-    }
-    await requestBackgroundWithPriming();
-    checkPermissions();
-  }, [checkPermissions]);
-
-  const fixNotifications = useCallback(async () => {
-    const notif = await getNotificationStatus();
-    if (!notif.canAskAgain) {
-      Linking.openSettings();
-      return;
-    }
-    await requestNotificationPermission();
-    checkPermissions();
-  }, [checkPermissions]);
+  // Reaching this checklist means the permission was already asked for and
+  // denied at least once, so there's nothing left to (re-)request — go
+  // straight to Settings instead of re-attempting a native prompt that's
+  // likely already exhausted.
+  const openSettings = useCallback(async () => {
+    Linking.openSettings();
+  }, []);
 
   const items: ChecklistItem[] = [
     {
@@ -104,14 +81,14 @@ export function useDriverAccessChecklist(): DriverAccessChecklist {
       label: "Дайте доступ к геолокации в фоновом режиме",
       blocked: bgLocationBlocked,
       severity: "blocking",
-      fix: fixBgLocation,
+      fix: openSettings,
     },
     {
       id: "notifications",
       label: "Разрешите уведомления о заказах",
       blocked: notifBlocked,
       severity: "degraded",
-      fix: fixNotifications,
+      fix: openSettings,
     },
   ];
 

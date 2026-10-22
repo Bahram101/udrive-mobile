@@ -22,12 +22,17 @@ const SHEET_SHADOW = {
 type BottomSheetProps = {
   visible: boolean;
   onClose: () => void;
+  /** Fires once the close animation actually finishes (the Modal is gone) —
+   * use this instead of a timeout to run something that shouldn't overlap
+   * with the closing Modal, e.g. `Linking.openSettings()`. */
+  onClosed?: () => void;
   children: ReactNode;
 };
 
 export default function BottomSheet({
   visible,
   onClose,
+  onClosed,
   children,
 }: BottomSheetProps) {
   const insets = useSafeAreaInsets();
@@ -48,11 +53,14 @@ export default function BottomSheet({
         SCREEN_HEIGHT,
         { duration: ANIMATION_DURATION },
         (finished) => {
-          if (finished) runOnJS(setMounted)(false);
+          if (finished) {
+            runOnJS(setMounted)(false);
+            if (onClosed) runOnJS(onClosed)();
+          }
         },
       );
     }
-  }, [visible, mounted, translateY]);
+  }, [visible, mounted, translateY, onClosed]);
 
   const sheetStyle = useAnimatedStyle(() => ({
     transform: [{ translateY: translateY.value }],

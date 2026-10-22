@@ -105,7 +105,13 @@ export default function SideMenu({ visible, onClose }: SideMenuProps) {
           style={[{ width: PANEL_WIDTH }, PANEL_SHADOW, panelStyle]}
           className="gap-2 bg-background pb-8 pt-16 px-5"
         >
-          <Pressable className="mb-2 flex-row items-center justify-between">
+          <Pressable
+            onPress={() => {
+              onClose();
+              router.push("/profile");
+            }}
+            className="mb-2 flex-row items-center justify-between"
+          >
             <View className="flex-row items-center gap-3">
               {user?.avatar ? (
                 <Image

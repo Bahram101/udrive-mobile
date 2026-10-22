@@ -21,6 +21,11 @@ module.exports = {
           600: "#dc2626",
           700: "#b91c1c",
         },
+        // for success confirmations (e.g. Toast)
+        success: {
+          600: "#16a34a",
+          700: "#15803d",
+        },
       },
     },
   },

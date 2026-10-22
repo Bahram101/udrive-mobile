@@ -26,7 +26,7 @@
 
 - `src/app/` — экраны Expo Router по группам: `(auth)` (телефон, OTP), `(onboarding)` (регистрация), `(client)`, `(driver)` (главная, статистика, кошелёк).
 - `src/features/<feature>/` — `api/` (запросы), `hooks/` (React Query), `components/`, `*.types.ts`. Фичи: `auth`, `driver`, `orders`, `notifications`.
-- `src/components/common/` — общие компоненты (`AppButton`, `AppInput`, `PhoneInput`, `ScreenLayout`, `SideMenu`, `BottomSheet` — универсальная модалка снизу экрана, переиспользуй её для любых всплывающих шторок вместо нового `Modal`); `src/components/ui/` — gluestack.
+- `src/components/common/` — общие компоненты (`AppButton`, `AppInput`, `PhoneInput`, `ScreenLayout`, `SideMenu`, `BottomSheet` — универсальная модалка снизу экрана, `Toast` — успех-баннер сверху экрана с автозакрытием; переиспользуй их вместо нового `Modal`/самодельного уведомления); `src/components/ui/` — gluestack.
 - `src/lib/` — `api/client.ts` (axios + Bearer-токен), `api/authInterceptor.ts` (refresh при 401), `storage/` (SecureStore для токенов, AsyncStorage для пользователя), `phone.ts`, `query/queryClient.ts`.
 - `src/providers/` — `AuthProvider` (сессия), `AuthGate` (редирект неавторизованных), `QueryProvider`.
 
@@ -80,7 +80,7 @@ npm run lint
 
 - Задачи выполняют агенты agy (скилл `agy`), Claude — оркестратор: бриф, проверка, отчёт.
 - **Всегда сначала расходуй квоту Gemini**, и только когда она исчерпана — переходи на Claude/GPT. Не наоборот.
-- Перед запуском: `agy-ts status` и `agy models`. `gemini-3.1-pro-high` в этой установке agy вообще отсутствует (проверено и через Antigravity-аккаунт, и через резервный ключ — в обоих случаях список один и тот же: `gemini-3.8-flash-*`, `claude-sonnet-4-6`, `claude-opus-4-6-thinking`, `gpt-oss-120b-medium`). Лучшая доступная Gemini-модель на деле — `gemini-3.8-flash-high`; для `claude-opus-4-6-thinking` передавать `--effort ""`.
+- Перед запуском: `agy-ts status` и `agy models` — список моделей меняется со временем (уже сменился один раз, 21.10: добавился `gemini-4-argon-*`, `claude-opus-4-6-thinking`/`claude-sonnet-4-6` заменились на `claude-opus-5-5-*`/`claude-sonnet-5-5-*`), не полагайся на зафиксированные здесь названия моделей — всегда проверяй `agy models` заново. На 21.10 лучшая Gemini-модель — `gemini-4-argon-high` (вместо недоступной ранее `gemini-3.1-pro-high`).
 - Настроен резервный ключ `GEMINI_FALLBACK_TOKEN` (`C:\Users\Bahrom\.config\agy-ts\tokens.env`) — подключается автоматически, когда квота Antigravity исчерпана.
 - Если квота agy закончилась — сообщить время восстановления и спросить владельца.
 

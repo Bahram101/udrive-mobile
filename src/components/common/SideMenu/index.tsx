@@ -11,6 +11,7 @@ import {
   View,
 } from "react-native";
 import Animated, {
+  interpolate,
   runOnJS,
   useAnimatedStyle,
   useSharedValue,
@@ -69,6 +70,10 @@ export default function SideMenu({ visible, onClose }: SideMenuProps) {
 
   const panelStyle = useAnimatedStyle(() => ({
     transform: [{ translateX: translateX.value }],
+  }));
+
+  const backdropStyle = useAnimatedStyle(() => ({
+    opacity: interpolate(translateX.value, [-PANEL_WIDTH, 0], [0, 1]),
   }));
 
   if (!mounted) return null;
@@ -194,7 +199,9 @@ export default function SideMenu({ visible, onClose }: SideMenuProps) {
           </View>
         </Animated.View>
 
-        <Pressable className="flex-1 bg-black/30" onPress={onClose} />
+        <Animated.View className="flex-1 bg-black/30" style={backdropStyle}>
+          <Pressable className="flex-1" onPress={onClose} />
+        </Animated.View>
       </View>
     </Modal>
   );

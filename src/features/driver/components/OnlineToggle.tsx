@@ -11,10 +11,10 @@ import { useDriverStatus } from "../hooks/useDriverStatus";
 import { useUpdateDriverStatus } from "../hooks/useUpdateDriverStatus";
 
 const TRACK_WIDTH = 190;
-const TRACK_HEIGHT = 31;
+const TRACK_HEIGHT = 29;
 const PILL_WIDTH = 100;
 // border-2 (2px) + px-0.5 (2px) on each side of the track.
-const TRACK_INSET = 8;
+const TRACK_INSET = 6;
 const PILL_TRAVEL = TRACK_WIDTH - PILL_WIDTH - TRACK_INSET;
 
 export function OnlineToggle() {
@@ -38,7 +38,7 @@ export function OnlineToggle() {
         onPress={handleToggle}
         disabled={updateStatus.isPending || driverStatus.isLoading}
         className={cn(
-          "justify-center rounded-full border-2 px-0.5",
+          "justify-center overflow-hidden rounded-full border px-0.5",
           isOnline ? "border-brand-400" : "border-destructive",
         )}
         style={{ width: TRACK_WIDTH, height: TRACK_HEIGHT }}
@@ -47,8 +47,8 @@ export function OnlineToggle() {
           style={[{ width: PILL_WIDTH }, pillStyle]}
           className={
             isOnline
-              ? "items-center rounded-full border-2 border-brand-400 bg-brand-400"
-              : "items-center rounded-full border-2 border-destructive bg-destructive "
+              ? "items-center justify-center rounded-full bg-brand-400"
+              : "items-center justify-center rounded-full bg-destructive "
           }
         >
           <Text

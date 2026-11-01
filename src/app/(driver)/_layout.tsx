@@ -19,8 +19,10 @@ export default function DriverLayout() {
         name="home"
         options={{
           title: "Лента заказов",
+          // expo-router типизирует color как RN ColorValue (включает null в RN 0.88),
+          // а Ionicons — нет; реально сюда всегда приходит строка из tabBar*TintColor.
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="list-outline" size={size} color={color} />
+            <Ionicons name="list-outline" size={size} color={color as string} />
           ),
         }}
       />
@@ -29,7 +31,7 @@ export default function DriverLayout() {
         options={{
           title: "Статистика",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="grid-outline" size={size} color={color} />
+            <Ionicons name="grid-outline" size={size} color={color as string} />
           ),
         }}
       />
@@ -38,7 +40,7 @@ export default function DriverLayout() {
         options={{
           title: "Кошелёк",
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="wallet-outline" size={size} color={color} />
+            <Ionicons name="wallet-outline" size={size} color={color as string} />
           ),
         }}
       />

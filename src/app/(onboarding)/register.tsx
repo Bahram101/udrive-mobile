@@ -8,6 +8,7 @@ import { Heading } from "@/components/ui/heading";
 import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
 import type { SelectableRole } from "@/features/auth/auth.types";
+import { TermsAgreement } from "@/features/auth/components/TermsAgreement";
 import { useVerifyOtp } from "@/features/auth/hooks";
 
 export default function RegisterScreen() {
@@ -18,6 +19,7 @@ export default function RegisterScreen() {
   const router = useRouter();
   const [name, setName] = useState("");
   const [role, setRole] = useState<SelectableRole | null>(null);
+  const [termsAccepted, setTermsAccepted] = useState(false);
 
   const register = useVerifyOtp();
 
@@ -25,7 +27,7 @@ export default function RegisterScreen() {
     if (!role) return;
 
     register.mutate(
-      { phone, code, name, role },
+      { phone, code, name, role, termsAccepted },
       {
         onSuccess: (authUser) => {
           router.replace(
@@ -88,9 +90,16 @@ export default function RegisterScreen() {
             </View>
           </VStack>
 
+          <TermsAgreement
+            checked={termsAccepted}
+            onToggle={() => setTermsAccepted((v) => !v)}
+          />
+
           <AppButton
             onPress={handleSubmit}
-            isDisabled={register.isPending || !name || !role}
+            isDisabled={
+              register.isPending || !name || !role || !termsAccepted
+            }
             isLoading={register.isPending}
           >
             Продолжить

@@ -1,6 +1,7 @@
 import { apiClient } from "@/lib/api/client";
 
 import type {
+  AcceptTermsResponse,
   MeResponse,
   SendOtpPayload,
   SendOtpResponse,
@@ -34,6 +35,13 @@ export const authService = {
   async switchRole(): Promise<SwitchRoleResponse> {
     const { data } = await apiClient.patch<SwitchRoleResponse>(
       "/auth/switch-role",
+    );
+    return data;
+  },
+
+  async acceptTerms(): Promise<AcceptTermsResponse> {
+    const { data } = await apiClient.post<AcceptTermsResponse>(
+      "/auth/accept-terms",
     );
     return data;
   },

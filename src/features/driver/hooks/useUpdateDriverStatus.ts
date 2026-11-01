@@ -31,7 +31,14 @@ export function useUpdateDriverStatus() {
         return response;
       }
 
-      const fg = await Location.requestForegroundPermissionsAsync();
+      let fg: Location.LocationPermissionResponse;
+      try {
+        fg = await Location.requestForegroundPermissionsAsync();
+      } catch {
+        throw new Error(
+          "Не удалось запросить доступ к геолокации. Попробуйте позже.",
+        );
+      }
       if (fg.status !== Location.PermissionStatus.GRANTED) {
         throw new Error("Разрешите доступ к геолокации, чтобы выйти на линию");
       }
@@ -43,9 +50,16 @@ export function useUpdateDriverStatus() {
         throw new Error(BACKGROUND_LOCATION_REQUIRED_MESSAGE);
       }
 
-      const position = await Location.getCurrentPositionAsync({
-        accuracy: Location.Accuracy.Balanced,
-      });
+      let position: Location.LocationObject;
+      try {
+        position = await Location.getCurrentPositionAsync({
+          accuracy: Location.Accuracy.Balanced,
+        });
+      } catch {
+        throw new Error(
+          "Не удалось определить местоположение. Проверьте GPS и попробуйте снова.",
+        );
+      }
 
       const response = await withNormalizedError(() =>
         DriverService.updateStatus({

@@ -102,6 +102,10 @@ export default function SideMenu({ visible, onClose }: SideMenuProps) {
     >
       <View className="flex-1 flex-row">
         <Animated.View
+          // Без растеризации iOS пересчитывает путь тени на каждый кадр
+          // transform-анимации, и тень справа визуально "тащится" за панелью.
+          shouldRasterizeIOS
+          renderToHardwareTextureAndroid
           style={[{ width: PANEL_WIDTH }, PANEL_SHADOW, panelStyle]}
           className="gap-2 bg-background pb-8 pt-16 px-5"
         >

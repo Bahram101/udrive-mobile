@@ -10,6 +10,7 @@ export type AuthUser = {
   email?: string | null;
   avatar?: string | null;
   rating?: number | null;
+  termsAcceptedAt: string | null;
   driver?: { id: string };
 };
 
@@ -33,6 +34,11 @@ export type VerifyOtpPayload = {
   code: string;
   name?: string;
   role?: SelectableRole;
+  termsAccepted?: boolean;
+};
+
+export type AcceptTermsResponse = {
+  user: AuthUser;
 };
 
 export type VerifyOtpResponse = AuthTokens & {

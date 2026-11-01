@@ -10,7 +10,10 @@ import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
 import type { AuthUser } from "@/features/auth/auth.types";
 import { TermsAgreement } from "@/features/auth/components/TermsAgreement";
-import { useAcceptTerms, useSendOtp, useVerifyOtp } from "@/features/auth/hooks";
+import {
+  useAcceptTerms,
+  useVerifyOtp
+} from "@/features/auth/hooks";
 
 import { formatPhoneForDisplay } from "@/lib/phone";
 
@@ -30,7 +33,6 @@ export default function OtpScreen() {
     needsTelegramLink === "true" && !!telegramBotUsername;
 
   const verifyOtp = useVerifyOtp();
-  const resendOtp = useSendOtp();
   const acceptTerms = useAcceptTerms();
 
   const isNewUser =

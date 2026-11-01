@@ -51,11 +51,12 @@ export default function SideMenu({ visible, onClose }: SideMenuProps) {
   const [mounted, setMounted] = useState(false);
   const translateX = useSharedValue(-PANEL_WIDTH);
 
+  if (visible && !mounted) setMounted(true);
+
   useEffect(() => {
     if (visible) {
-      setMounted(true);
       translateX.value = withTiming(0, { duration: ANIMATION_DURATION });
-    } else if (mounted) {
+    } else {
       translateX.value = withTiming(
         -PANEL_WIDTH,
         { duration: ANIMATION_DURATION },
@@ -64,7 +65,7 @@ export default function SideMenu({ visible, onClose }: SideMenuProps) {
         },
       );
     }
-  }, [visible, mounted, translateX]);
+  }, [visible, translateX]);
 
   const panelStyle = useAnimatedStyle(() => ({
     transform: [{ translateX: translateX.value }],

@@ -8,7 +8,12 @@ import type { CreateOrderInput } from "../orders.types";
 
 export function useCreateOrder() {
   return useMutation({
-    mutationFn: async ({ fromAddress, toAddress }: CreateOrderInput) => {
+    mutationFn: async ({
+      fromAddress,
+      toAddress,
+      toLat,
+      toLng,
+    }: CreateOrderInput) => {
       const { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== Location.PermissionStatus.GRANTED) {
         throw new Error("Разрешите доступ к геолокации, чтобы отправить заказ");
@@ -24,6 +29,7 @@ export function useCreateOrder() {
           toAddress,
           fromLat: position.coords.latitude,
           fromLng: position.coords.longitude,
+          ...(toLat != null && toLng != null ? { toLat, toLng } : {}),
         }),
       );
     },

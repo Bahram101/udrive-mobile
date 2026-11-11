@@ -29,9 +29,15 @@ export function AccessRestrictedSheet({ visible, onClose }: Props) {
 
   return (
     <BottomSheet visible={visible} onClose={onClose} onClosed={handleClosed}>
-      <View className="items-center rounded-t-3xl bg-alert-600 px-4 pb-6 pt-4">
-        <Text className="text-center text-xl font-bold text-white">
+      <View className="items-center gap-2 px-4 pt-4">
+        <View className="mb-1 h-14 w-14 items-center justify-center rounded-full bg-alert-50">
+          <Ionicons name="warning" size={28} color={COLORS.alert[600]} />
+        </View>
+        <Text className="text-center text-xl font-bold text-foreground">
           Доступ к заказам ограничен
+        </Text>
+        <Text className="text-center text-sm text-muted-foreground">
+          Выполните пункты ниже, чтобы получать заказы
         </Text>
       </View>
 

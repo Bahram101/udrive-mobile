@@ -1,9 +1,24 @@
+import axios from "axios";
 import * as Location from "expo-location";
 import * as TaskManager from "expo-task-manager";
 
 import { DriverService } from "../api/driver.service";
 
 export const DRIVER_LOCATION_TASK = "DRIVER_LOCATION_TASK";
+
+async function syncLocation(coords: Location.LocationObjectCoords) {
+  try {
+    await DriverService.updateLocation({
+      lat: coords.latitude,
+      lng: coords.longitude,
+    });
+  } catch (err) {
+    // 409 = backend already has the driver offline: an update that was
+    // in flight while going off the line, nothing to report.
+    if (axios.isAxiosError(err) && err.response?.status === 409) return;
+    console.warn("Failed to sync location to backend:", err);
+  }
+}
 
 TaskManager.defineTask(DRIVER_LOCATION_TASK, async ({ data, error }) => {
   if (error) {
@@ -13,18 +28,19 @@ TaskManager.defineTask(DRIVER_LOCATION_TASK, async ({ data, error }) => {
   if (data) {
     const { locations } = data as { locations: Location.LocationObject[] };
     const latest = locations[locations.length - 1];
-    if (latest) {
-      try {
-        await DriverService.updateLocation({
-          lat: latest.coords.latitude,
-          lng: latest.coords.longitude,
-        });
-      } catch (err) {
-        console.error("Failed to sync location to backend:", err);
-      }
-    }
+    if (latest) await syncLocation(latest.coords);
   }
 });
+
+/** Background tracking, falling back to foreground-only if it can't start. */
+export async function startDriverTracking() {
+  try {
+    await startLocationTracking();
+  } catch (err) {
+    console.warn("Failed to start background tracking:", err);
+    await startForegroundTracking();
+  }
+}
 
 export async function startLocationTracking() {
   const isStarted =
@@ -72,10 +88,7 @@ export async function startForegroundTracking(): Promise<boolean> {
         distanceInterval: 20,
       },
       (position) => {
-        DriverService.updateLocation({
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
-        }).catch(console.error);
+        void syncLocation(position.coords);
       },
     );
 

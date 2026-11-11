@@ -6,10 +6,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 import { DriverService } from "../api/driver.service";
 import type { UpdateDriverStatusResponse } from "../driver.types";
-import {
-  startForegroundTracking,
-  startLocationTracking,
-} from "../services/locationTask";
+import { startDriverTracking } from "../services/locationTask";
 
 export function useDriverStatus() {
   const queryClient = useQueryClient();
@@ -31,11 +28,7 @@ export function useDriverStatus() {
         const bg = await Location.getBackgroundPermissionsAsync();
 
         if (bg.status === Location.PermissionStatus.GRANTED) {
-          try {
-            await startLocationTracking();
-          } catch {
-            await startForegroundTracking();
-          }
+          await startDriverTracking();
           return;
         }
 

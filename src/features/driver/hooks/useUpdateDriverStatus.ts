@@ -10,8 +10,7 @@ import {
   showDenialNoticeOnce,
 } from "../services/locationPermissions";
 import {
-  startForegroundTracking,
-  startLocationTracking,
+  startDriverTracking,
   stopLocationTracking,
 } from "../services/locationTask";
 
@@ -24,11 +23,17 @@ export function useUpdateDriverStatus() {
   return useMutation({
     mutationFn: async (isOnline: boolean) => {
       if (!isOnline) {
-        const response = await withNormalizedError(() =>
-          DriverService.updateStatus({ isOnline: false }),
-        );
+        // Stop first: an update sent after the backend marks the driver
+        // offline is rejected with 409.
         await stopLocationTracking();
-        return response;
+        try {
+          return await withNormalizedError(() =>
+            DriverService.updateStatus({ isOnline: false }),
+          );
+        } catch (err) {
+          await startDriverTracking();
+          throw err;
+        }
       }
 
       let fg: Location.LocationPermissionResponse;
@@ -69,12 +74,7 @@ export function useUpdateDriverStatus() {
         }),
       );
 
-      try {
-        await startLocationTracking();
-      } catch (err) {
-        console.error("Failed to start background tracking:", err);
-        await startForegroundTracking();
-      }
+      await startDriverTracking();
 
       return response;
     },

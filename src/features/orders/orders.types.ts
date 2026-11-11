@@ -28,11 +28,15 @@ export type CreateOrderPayload = {
   fromLat: number;
   fromLng: number;
   toAddress?: string;
+  toLat?: number;
+  toLng?: number;
 };
 
 export type CreateOrderInput = {
   fromAddress: string;
   toAddress?: string;
+  toLat?: number;
+  toLng?: number;
 };
 
 export type OrderResponse = {

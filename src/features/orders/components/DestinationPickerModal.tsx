@@ -1,15 +1,12 @@
 import { Ionicons } from "@expo/vector-icons";
 import * as Location from "expo-location";
 import { useEffect, useState } from "react";
-import { Modal, Platform, Pressable, StyleSheet, View } from "react-native";
-import MapView, {
-  Marker,
-  PROVIDER_DEFAULT,
-  PROVIDER_GOOGLE,
-} from "react-native-maps";
+import { Modal, Pressable, StyleSheet, View } from "react-native";
+import MapView, { Marker, UrlTile } from "react-native-maps";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import AppButton from "@/components/common/AppButton";
+import { OsmAttribution } from "@/components/common/OsmAttribution";
 import Loader from "@/components/ui/Loader";
 import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
@@ -136,9 +133,7 @@ export function DestinationPickerModal({
             <View className="flex-1">
               <MapView
                 style={StyleSheet.absoluteFill}
-                provider={
-                  Platform.OS === "android" ? PROVIDER_GOOGLE : PROVIDER_DEFAULT
-                }
+                mapType="none"
                 showsUserLocation
                 initialRegion={{
                   ...initialCenter,
@@ -149,6 +144,11 @@ export function DestinationPickerModal({
                   setMarkerCoordinate(event.nativeEvent.coordinate)
                 }
               >
+                <UrlTile
+                  urlTemplate="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+                  maximumZ={19}
+                  flipY={false}
+                />
                 <Marker
                   coordinate={markerCoordinate}
                   draggable
@@ -159,6 +159,7 @@ export function DestinationPickerModal({
                   pinColor={COLORS.brand[800]}
                 />
               </MapView>
+              <OsmAttribution />
             </View>
 
             <VStack

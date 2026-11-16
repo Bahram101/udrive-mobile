@@ -1,12 +1,9 @@
 import * as Location from "expo-location";
 import { useEffect, useRef, useState } from "react";
-import { Platform, StyleSheet, View } from "react-native";
-import MapView, {
-  Marker,
-  PROVIDER_DEFAULT,
-  PROVIDER_GOOGLE,
-} from "react-native-maps";
+import { StyleSheet, View } from "react-native";
+import MapView, { Marker, UrlTile } from "react-native-maps";
 
+import { OsmAttribution } from "@/components/common/OsmAttribution";
 import { COLORS } from "@/constants/theme";
 
 import type { Order } from "../orders.types";
@@ -110,9 +107,7 @@ export function OrderMap({ order, role }: OrderMapProps) {
       <MapView
         ref={mapRef}
         style={StyleSheet.absoluteFill}
-        provider={
-          Platform.OS === "android" ? PROVIDER_GOOGLE : PROVIDER_DEFAULT
-        }
+        mapType="none"
         showsUserLocation
         initialRegion={{
           ...clientPosition,
@@ -120,6 +115,11 @@ export function OrderMap({ order, role }: OrderMapProps) {
           longitudeDelta: 0.02,
         }}
       >
+        <UrlTile
+          urlTemplate="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+          maximumZ={19}
+          flipY={false}
+        />
         {role === "driver" ? (
           <Marker
             coordinate={clientPosition}
@@ -137,6 +137,7 @@ export function OrderMap({ order, role }: OrderMapProps) {
           )
         )}
       </MapView>
+      <OsmAttribution />
     </View>
   );
 }

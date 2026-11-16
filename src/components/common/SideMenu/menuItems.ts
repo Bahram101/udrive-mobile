@@ -26,4 +26,9 @@ export const MENU_ITEMS: MenuItemConfig[] = [
   // { key: "notifications", label: "Уведомления", icon: "notifications-outline" },
   // { key: "security", label: "Безопасность", icon: "shield-checkmark-outline" },
   { key: "settings", label: "Настройки", icon: "settings-outline" },
+  {
+    key: "addressCollection",
+    label: "Сбор адресов",
+    icon: "location-outline",
+  },
 ];

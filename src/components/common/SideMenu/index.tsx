@@ -154,6 +154,14 @@ export default function SideMenu({ visible, onClose }: SideMenuProps) {
               <Pressable
                 key={item.key}
                 className="flex-row items-center gap-4 py-3.5"
+                onPress={
+                  item.key === "addressCollection"
+                    ? () => {
+                        onClose();
+                        router.push("/address-collection");
+                      }
+                    : undefined
+                }
               >
                 <Ionicons name={item.icon} size={22} color="#0a0a0a" />
                 <Text className="flex-1 text-[15px] font-medium">
